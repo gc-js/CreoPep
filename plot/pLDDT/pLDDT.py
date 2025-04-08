@@ -1,4 +1,3 @@
-# 画图
 import os
 import plotly
 import numpy as np
