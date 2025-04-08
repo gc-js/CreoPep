@@ -6,8 +6,8 @@ lihuas = ["GRAVY","Charge","Isoelectric_point"]
 
 for lihua in lihuas:
     for cycle in cycles:
-        all_data_excel = f"work/conoGen/lihuaxingzhi/{cycle}/{lihua}.csv"
-        all_data_train = r"/home/aistudio/work/output_train_high.csv"
+        all_data_excel = f"/CreoPep/plot/physicochemical_properties/{cycle}/{lihua}.csv"
+        all_data_train = r"/CreoPep/plot/physicochemical_properties/output_train_high.csv"
         team_sheet = pd.read_csv(all_data_excel)
         train_data = pd.read_csv(all_data_train, index_col="target")
 
@@ -105,4 +105,4 @@ for lihua in lihuas:
         )
         # fig.update_layout(violingap=0, violingroupgap=0, violinmode='overlay')
         fig.show()
-        fig.write_image(f"/home/aistudio/work/conoGen/lihuaxingzhi/{cycle}_{lihua}.png",scale=4)
+        fig.write_image(f"./CreoPep/plot/physicochemical_properties/{cycle}_{lihua}.png",scale=4)
