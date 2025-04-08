@@ -14,14 +14,14 @@ for cycle in cycles:
 
     team_sheet = pd.read_csv(all_data_excel)
     colors = {
-        'a3b2': '#845ec2',  # Tomato
-        'a3b4': '#2c73d2',  # LightGreen
-        'a7': '#b0a8b9',    # LightBlue
-        'a9a10': '#ffc75f', # LightYellow
-        'AChBP': '#ff8066', # LightPink
-        'Ca22': '#00c9a7', # DarkSeaGreen
-        'Na12': '#926c00', # LightSkyBlue
-        'a4b2': 'pink',  # Tomato
+        'a3b2': '#845ec2',  
+        'a3b4': '#2c73d2',  
+        'a7': '#b0a8b9',    
+        'a9a10': '#ffc75f', 
+        'AChBP': '#ff8066',
+        'Ca22': '#00c9a7', 
+        'Na12': '#926c00',
+        'a4b2': 'pink',  
         'Train': 'green'
     }
     tasks = ["Train","AChBP","Ca22","a3b4","Na12","a3b2","a7","a9a10","a4b2"]
