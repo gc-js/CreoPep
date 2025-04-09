@@ -15,7 +15,11 @@ We also host a trained version of the model on the HuggingFace Spaces, so you ca
 
 
 ## Installation
+```bash
+docker container run --gpus "device=0" -m 28G --name teamname --rm -v $PWD/CellSeg_Test/:/workspace/inputs/ -v $PWD/teamname_seg/:/workspace/outputs/ teamname:latest /bin/bash -c "sh predict.sh"
+```
 
+- `--gpus`: specify the available GPU during inference
 ## Get Started
 
 ## Model Training
