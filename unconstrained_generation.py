@@ -13,7 +13,7 @@ def temperature_sampling(logits, temperature):
     sampled_token = torch.multinomial(probabilities, 1)
     return sampled_token
 
-def CreoPep(τ, g_num, start, end, model_name, seed):
+def CreoPep(τ, g_num, start, end, model_name, seed, output):
     if seed =='random':
         seed = random.randint(0,100000)
         setup_seed(seed)
@@ -121,7 +121,7 @@ def CreoPep(τ, g_num, start, end, model_name, seed):
                     'Potency_probability': act_probability_all,
                     'random_seed': seed
                 })
-                out.to_csv("./test/output_unconstrained_generation.csv", index=False, encoding='utf-8-sig')
+                out.to_csv(output, index=False, encoding='utf-8-sig')
                 count += 1
 
 if __name__ == '__main__':
@@ -131,6 +131,7 @@ if __name__ == '__main__':
     parser.add_argument('-e', '--end', default='16', type=int, help='Max length for generating peptides')
     parser.add_argument('-m', '--model', default='./models/model_final.pt', type=str, help='Model: model parameters trained at different stages of data augmentation.')
     parser.add_argument('-s', '--seed', default='random', help='Seed: enter an integer as the random seed to ensure reproducible results. The default is random.')
+    parser.add_argument('-o', '--output', default='./test/output_unconstrained_generation.csv', help='output file')
     args = parser.parse_args()
 
-    CreoPep(args.temperature, args.num, args.begin, args.end, args.model, args.seed)
+    CreoPep(args.temperature, args.num, args.begin, args.end, args.model, args.seed, args.output)
