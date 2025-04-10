@@ -7,11 +7,10 @@ from copy import deepcopy
 import pickle
 import torch.nn as nn
 import matplotlib.pyplot as plt
-from utils import setup_seed, CrossEntropyLossWithMask, show_parameters, create_vocab
+from creopep.utils import setup_seed, CrossEntropyLossWithMask, show_parameters, create_vocab
 
-from dataset_mlm import  get_paded_token_idx, make_mask, add_tokens_to_vocab
-from model import  load_pretrained_model, ConoModel, MSABlock
-from model import ConoEncoder
+from creopep.dataset_mlm import  get_paded_token_idx, make_mask, add_tokens_to_vocab
+from model import  load_pretrained_model, ConoModel, MSABlock, ConoEncoder
 
 def eval_one_epoch(loader, cono_model, loss_fct, vocab_mlm, device):
     """Evaluate one epoch on validation set"""
@@ -136,27 +135,22 @@ if __name__ == '__main__':
             print(f'[INFO] Epoch {ep} loss: {ep_loss_train[-1]}, valid loss: {ep_loss_val[-1]}')
             valid_loss = ep_loss_val[-1]
 
-            # if valid_loss < best_loss:
-            #     best_loss = valid_loss
-            #     torch.save(cono_model.state_dict(), f'/home/ubuntu/work/gecheng/conoGen_final/FinalCono/new_cycle/model_MLM/mlm-model-param-{T}.pt')
-            #     torch.save(cono_model, f'/home/ubuntu/work/gecheng/conoGen_final/FinalCono/new_cycle/model_MLM/mlm-model-{T}.pt')
-        # all_ep_loss_train.append(ep_loss_train)
-        # all_ep_loss_val.append(ep_loss_val)
+            if valid_loss < best_loss:
+                best_loss = valid_loss
+                torch.save(cono_model.state_dict(), f'./models/mlm-model-param-{T}.pt')
+                torch.save(cono_model, f'./models/mlm-model-{T}.pt')
+        all_ep_loss_train.append(ep_loss_train)
+        all_ep_loss_val.append(ep_loss_val)
         
     # Plotting the loss curves for each T_step
-    # plt.figure(figsize=(10, 8))
-    # for i, T in enumerate(T_step):
-    #     plt.plot(all_ep_loss_val[i],'-o', label=f"T={T}", markersize=3)
+    plt.figure(figsize=(10, 8))
+    for i, T in enumerate(T_step):
+        plt.plot(all_ep_loss_val[i],'-o', label=f"T={T}", markersize=3)
 
-    # plt.xticks(np.arange(0, epochs, step=10))
-    # plt.yticks(np.arange(0, 10, step=1))
-    # plt.ylim((0, 10))
-    # plt.savefig(f"/home/ubuntu/work/gecheng/conoGen_final/FinalCono/new_cycle/img/Loss_curves_mlm.png")
-
-    # # 将all_ep_loss_val保存到txt
-    # with open(f'/home/ubuntu/work/gecheng/conoGen_final/FinalCono/new_cycle/img/all_ep_loss_val_mlm.txt', 'w') as f:
-    #     for ep_loss_val in all_ep_loss_val:
-    #         f.write(f"{ep_loss_val}\n")
+    plt.xticks(np.arange(0, epochs, step=10))
+    plt.yticks(np.arange(0, 10, step=1))
+    plt.ylim((0, 10))
+    plt.savefig(f"./imgs/Loss_curves.png")
 
 
 
