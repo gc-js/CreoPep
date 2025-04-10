@@ -125,8 +125,8 @@ def CreoPep(X1, X2, τ, g_num, start, end, model_name, seed, output):
                     count += 1
 
 if __name__ == '__main__':
-    parser.add_argument('-su', '--subtype', default='<α7>', type=str, help='Subtype: X if needs to be predicted.')
-    parser.add_argument('-po', '--potency', default='<high>', type=str, help='Potency: X if needs to be predicted.')   
+    parser.add_argument('-is', '--subtype', default='<α7>', type=str, help='Subtype: X if needs to be predicted.')
+    parser.add_argument('-ip', '--potency', default='<high>', type=str, help='Potency: X if needs to be predicted.')   
     parser.add_argument('-t', '--temperature', default='1', type=int, help='τ: temperature factor controls the diversity of conotoxins generated. The higher the value, the higher the diversity.')
     parser.add_argument('-n', '--num', default='10', type=int, help='Number of generations')
     parser.add_argument('-b', '--begin', default='12', type=int, help='Min length for generating peptides')
