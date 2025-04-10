@@ -5,8 +5,8 @@ import numpy as np
 import torch.nn.functional as F
 from transformers import AutoModelForMaskedLM, AutoConfig
 
-from bertmodel import make_bert, make_bert_without_emb
-from utils import ContraLoss
+from creopep.bertmodel import make_bert, make_bert_without_emb
+from creopep.utils import ContraLoss
     
 def load_pretrained_model():
     # model_checkpoint = "/home/ubuntu/work/zq/conoMLM/prot_bert/prot_bert"
