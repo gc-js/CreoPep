@@ -5,7 +5,7 @@ from creopep.utils import create_vocab, setup_seed
 from creopep.dataset_mlm import  get_paded_token_idx_gen, add_tokens_to_vocab
 import argparse
 
-parser = argparse.ArgumentParser('Unconstrained_generation', add_help=False)
+parser = argparse.ArgumentParser('Conditional Generation', add_help=False)
 
 def temperature_sampling(logits, temperature):
     logits = logits / temperature
