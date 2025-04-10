@@ -117,7 +117,7 @@ def make_mask(seq_ser, start, end, time, vocab_mlm, labels, idx_msa, attn_idx):
     masked_seq = seq_ser.apply(mask, args=(start, end, time))
     masked_idx = vocab_mlm.__getitem__(list(masked_seq))
     masked_idx = torch.tensor(masked_idx)
-    device = torch.device('cuda:1')
+    device = torch.device('cuda:0')
     data_arrays = (masked_idx.to(device), labels.to(device), idx_msa.to(device), attn_idx.to(device)) 
     dataset = TensorDataset(*data_arrays)
     train_dataset, test_dataset = train_test_split(dataset, test_size=0.1, random_state=42, shuffle=True)
