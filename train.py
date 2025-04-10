@@ -42,7 +42,7 @@ if __name__ == '__main__':
     for T in T_step:
         epochs = 100
         setup_seed(42)
-        device = torch.device('cuda:1')
+        device = torch.device('cuda:0')
         
         # load vocab
         vocab_mlm = create_vocab()
