@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
         # integrate model
         cono_model = ConoModel(cono_encoder, msa_block, cono_decoder).to(device)
-        print(cono_model)
+        
         # freeze encoder
         for param in cono_model.encoder.parameters():
             param.requires_grad = False
