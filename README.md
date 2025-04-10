@@ -33,6 +33,9 @@ python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-
 
 - `-i`: conotoxins need to be predicted.
 
+
+- `-is`: Subtype: X if needs to be predicted.
+
     optional: `<K16>`, `<α1β1γδ>`, `<Ca22>`, `<AChBP>`, `<K13>`, `<α1BAR>`, `<α1β1ε>`, `<α1AAR>`, `<GluN3A>`, `<α4β2>`,
 `<GluN2B>`, `<α75HT3>`, `<Na14>`, `<α7>`, `<GluN2C>`, `<NET>`, `<NavBh>`, `<α6β3β4>`, `<Na11>`, `<Ca13>`,
 `<Ca12>`, `<Na16>`, `<α6α3β2>`, `<GluN2A>`, `<GluN2D>`, `<K17>`, `<α1β1δε>`, `<GABA>`, `<α9>`, `<K12>`,
@@ -40,11 +43,11 @@ python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-
 `<Na13>`, `<Na12>`, `<Na15>`, `<α4β4>`, `<α7α6β2>`, `<α1β1γ>`, `<NaTTXR>`, `<K11>`, `<Ca23>`,
 `<α9α10>`, `<α6α3β4>`, `<NaTTXS>`, `<Na17>`
 
-- `-is`: Subtype: X if needs to be predicted.
+- `-ip`: Potency: X if needs to be predicted.
 
     optional: `<high>`, `<low>`
 
-- `-ip`: Potency: X if needs to be predicted.
+
 - `-m`: model parameters trained at different stages of data augmentation.
 
 #### Unconstrained Generation
