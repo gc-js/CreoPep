@@ -50,24 +50,45 @@ python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-
 #### Unconstrained Generation
 
 ```bash
-python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-27.pt
+python unconstrained_generation.py -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_unconstrained_generation.csv
 ```
+- `-t`: temperature factor (τ) controls the diversity of conotoxins generated. The higher the value, the higher the diversity.
+- `-n`: Number of generations: if it is not completed within 1200 seconds, it will automatically stop.
+- `-b`: Min length for generating peptides.
+- `-e`: Max length for generating peptides.
+- `-m`: model parameters trained at different stages of data augmentation.
+- `-s`: Seed: enter an integer as the random seed to ensure reproducible results. The default is random.
+- `-o`: output file (.csv)
 
-- `-i`: conotoxins need to be predicted.
+#### Conditional Generation
 
-    optional: `<K16>`, `<α1β1γδ>`, `<Ca22>`, `<AChBP>`, `<K13>`, `<α1BAR>`, `<α1β1ε>`, `<α1AAR>`, `<GluN3A>`, `<α4β2>`,
-`<GluN2B>`, `<α75HT3>`, `<Na14>`, `<α7>`, `<GluN2C>`, `<NET>`, `<NavBh>`, `<α6β3β4>`, `<Na11>`, `<Ca13>`,
-`<Ca12>`, `<Na16>`, `<α6α3β2>`, `<GluN2A>`, `<GluN2D>`, `<K17>`, `<α1β1δε>`, `<GABA>`, `<α9>`, `<K12>`,
-`<Kshaker>`, `<α3β4>`, `<Na18>`, `<α3β2>`, `<α6α3β2β3>`, `<α1β1δ>`, `<α6α3β4β3>`, `<α2β2>`, `<α6β4>`, `<α2β4>`,
-`<Na13>`, `<Na12>`, `<Na15>`, `<α4β4>`, `<α7α6β2>`, `<α1β1γ>`, `<NaTTXR>`, `<K11>`, `<Ca23>`,
-`<α9α10>`, `<α6α3β4>`, `<NaTTXS>`, `<Na17>`
+```bash
+python conditional_generation.py -is <α7> -ip <high> -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_unconstrained_generation.csv
+```
+- `-is`: subtype of action. For example, `<α7>`.
+- `-ip`: required potency. For example, `<high>`.
+- `-t`: temperature factor (τ) controls the diversity of conotoxins generated. The higher the value, the higher the diversity.
+- `-n`: Number of generations.
+- `-b`: Min length for generating peptides.
+- `-e`: Max length for generating peptides.
+- `-m`: model parameters trained at different stages of data augmentation.
+- `-s`: Seed: enter an integer as the random seed to ensure reproducible results. The default is random.
+- `-o`: output file (.csv)
 
-- `-is`: Subtype: X if needs to be predicted.
+#### Optimization Generation
 
-    optional: `<high>`, `<low>`
-
-- `-ip`: Potency: X if needs to be predicted.
-- `-m`: model parameters trained at different stages of data augmentation. 
+```bash
+python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is <α7> -ip <high> -t 1 -n 100 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_unconstrained_generation.csv
+```
+- `-i`: a conotoxin that needs to be optimized. For example, GCCSDPRCAWRC.
+- `-x`: the positions that need to be optimized, replaced by X. For example, GCCXXXXCAWRC.
+- `-is`: subtype of action. For example, `<α7>`.
+- `-ip`: required potency. For example, `<high>`.
+- `-t`: temperature factor (τ) controls the diversity of conotoxins generated. The higher the value, the higher the diversity.
+- `-n`: Number of generations.
+- `-m`: model parameters trained at different stages of data augmentation.
+- `-s`: Seed: enter an integer as the random seed to ensure reproducible results. The default is random.
+- `-o`: output file (.csv)
 
 ## Model Training
 
