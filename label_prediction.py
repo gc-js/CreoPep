@@ -69,6 +69,6 @@ if __name__ == '__main__':
     parser.add_argument('-is', '--subtype', default='X', type=str, help='Subtype: X if needs to be predicted.')
     parser.add_argument('-ip', '--potency', default='X', type=str, help='Potency: X if needs to be predicted.')
     parser.add_argument('-m', '--model', default='./models/model_final.pt', type=str, help='Model: model parameters trained at different stages of data augmentation.')
-    parser.add_argument('-o', '--output', default='./test/output_optimization_generation.csv', help='output file')
+    parser.add_argument('-o', '--output', default='./test/output_label_prediction.csv', help='output file')
     args = parser.parse_args()
     CreoPep(args.ctxs, args.subtype, args.potency,  args.model, args.output)
