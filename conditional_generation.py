@@ -122,7 +122,7 @@ def CreoPep(X1, X2, τ, g_num, length_range, model_name, seed):
                     })
                     out.to_csv("./test/output_conditional_generation.csv", index=False, encoding='utf-8-sig')
 
-    if __name__ == '__main__':
+if __name__ == '__main__':
     parser.add_argument('-s', '--subtype', default='X', type=str, help='Subtype: X if needs to be predicted.')
     parser.add_argument('-p', '--potency', default='X', type=str, help='Potency: X if needs to be predicted.')   
     parser.add_argument('-t', '--temperature', default='1', type=str, help='τ: temperature factor controls the diversity of conotoxins generated. The higher the value, the higher the diversity.')
