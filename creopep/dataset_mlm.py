@@ -45,7 +45,7 @@ def split_seq(seq, vocab, get_seq=False):
         return [add(vocab.split_seq(msa1_seq))]  + [add(vocab.split_seq(msa2_seq))]  + [add(vocab.split_seq(msa3_seq))]
 
 def get_paded_token_idx(vocab_mlm):
-    cono_path = '/home/ubuntu/work/gecheng/conoGen_final/FinalCono/new_cycle/conoData_C5.csv'
+    cono_path = './data/conoData_C5.csv'
     seq = pd.read_csv(cono_path)['Sequences']
     
     splited_seq = list(seq.apply(split_seq, args=(vocab_mlm,True, )))
