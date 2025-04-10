@@ -3,12 +3,14 @@ import copy, math
 import torch
 import numpy as np
 import torch.nn.functional as F
-
+from tqdm import tqdm
+import random
+from transformers import set_seed
 from creopep.vocab import PepVocab
 
 def create_vocab():
     vocab_mlm = PepVocab()
-    vocab_mlm.vocab_from_txt('/home/ubuntu/work/gecheng/conoGen_final/vocab.txt')
+    vocab_mlm.vocab_from_txt('./data/vocab.txt')
     # vocab_mlm.token_to_idx['-'] = 23
     return vocab_mlm
 
@@ -46,12 +48,7 @@ class ContraLoss(nn.Module):
         return self.contrastive_loss(x, y)
 
 
-import numpy as np
-from tqdm import tqdm
-import torch
-import torch.nn as nn
-import random
-from transformers import set_seed
+
 
 def show_parameters(model: nn.Module, show_all=False, show_trainable=True):
 
