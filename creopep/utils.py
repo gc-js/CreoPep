@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import torch.nn.functional as F
 
-from vocab import PepVocab
+from creopep.vocab import PepVocab
 
 def create_vocab():
     vocab_mlm = PepVocab()
