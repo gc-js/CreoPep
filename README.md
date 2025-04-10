@@ -18,6 +18,7 @@ We also host a trained version of the model on the HuggingFace Spaces, so you ca
 
 ```shell
 git clone git@github.com:gc-js/CreoPep.git
+cd CreoPep
 conda create -n CreoPep python=3.10.14
 python -m pip install -r requirements.txt
 ```
