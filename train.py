@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
         # load pretrained model
         model = load_pretrained_model()
-        model.resize_token_embeddings(len(vocab_mlm))   # args.vocab_size
+        model.resize_token_embeddings(len(vocab_mlm))
 
         # cono_encoder 
         bert_part = model.bert
@@ -96,7 +96,6 @@ if __name__ == '__main__':
             time_step = range(1, T+1)
             for t in time_step:
                 padded_seq_copy = deepcopy(padded_seq)
-                
                 labels_copy = deepcopy(labels)
                 train_loader, test_loader = make_mask(padded_seq_copy, start=0, end=53, time=t, 
                                                     vocab_mlm=vocab_mlm, labels=labels_copy, idx_msa=idx_msa, attn_idx=attn_idx)
