@@ -3,6 +3,8 @@ from creopep.utils import create_vocab, setup_seed
 from creopep.dataset_mlm import  get_paded_token_idx_gen, add_tokens_to_vocab
 import argparse
 import pandas as pd
+from tqdm import tqdm
+
 setup_seed(4)
 device = torch.device("cuda:0")
 parser = argparse.ArgumentParser('Label Prediction', add_help=False)
@@ -18,6 +20,8 @@ def CreoPep(ctxs, X1, X2, model, output):
     model = torch.load(save_path, weights_only=False)
     model = model.to(device)
 
+    pbar = tqdm(lines, desc="Processing sequences")
+    
     for X3 in lines:
         vocab_mlm = create_vocab()
         vocab_mlm = add_tokens_to_vocab(vocab_mlm)
@@ -60,6 +64,10 @@ def CreoPep(ctxs, X1, X2, model, output):
         subtype_all.append(Subtype)
         potency_all.append(Potency)
         topk_all.append(Topk)
+        pbar.set_postfix({
+            "Processed": len(Seq_all),
+            "Current Seq": X3.strip()[:10] + "..." if len(X3) > 10 else X3.strip()
+        })
         data = {'Sequence': Seq_all, 'Subtype': subtype_all, 'Potency': potency_all, 'Topk': topk_all}
         df = pd.DataFrame(data)
         df.to_csv(output, index=False, encoding='utf-8-sig')
