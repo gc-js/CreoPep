@@ -2,5 +2,5 @@ transformers
 numpy
 pandas
 scikit-learn
-torch
+torch==2.2.2
 matplotlib
