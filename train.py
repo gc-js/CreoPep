@@ -1,15 +1,14 @@
 import torch
-from tqdm import tqdm
+import torch.nn as nn
+import pickle
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 from copy import deepcopy
-import pickle
-import torch.nn as nn
 import matplotlib.pyplot as plt
 from creopep.utils import setup_seed, CrossEntropyLossWithMask, show_parameters, create_vocab
-
 from creopep.dataset_mlm import  get_paded_token_idx, make_mask, add_tokens_to_vocab
-from model import  load_pretrained_model, ConoModel, MSABlock, ConoEncoder
+from creopep.model import  load_pretrained_model, ConoModel, MSABlock, ConoEncoder
 
 def eval_one_epoch(loader, cono_model, loss_fct, vocab_mlm, device):
     """Evaluate one epoch on validation set"""
