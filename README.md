@@ -68,7 +68,7 @@ python unconstrained_generation.py -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model
 #### Conditional Generation
 
 ```bash
-python conditional_generation.py -is "<α7>" -ip "<high>" -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_unconstrained_generation.csv
+python conditional_generation.py -is "<α7>" -ip "<high>" -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_conditional_generation.csv
 ```
 - `-is`: subtype of action. For example, `<α7>`.
 - `-ip`: required potency. For example, `<high>`.
@@ -83,7 +83,7 @@ python conditional_generation.py -is "<α7>" -ip "<high>" -t 1 -n 100 -b 12 -e 1
 #### Optimization Generation
 
 ```bash
-python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -ip "<high>" -t 1 -n 100 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_unconstrained_generation.csv
+python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -ip "<high>" -t 1 -n 100 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_optimization_generation.csv
 ```
 - `-i`: a conotoxin that needs to be optimized. For example, GCCSDPRCAWRC.
 - `-x`: the positions that need to be optimized, replaced by X. For example, GCCXXXXCAWRC.
