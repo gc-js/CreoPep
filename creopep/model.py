@@ -9,8 +9,7 @@ from creopep.bertmodel import make_bert, make_bert_without_emb
 from creopep.utils import ContraLoss
     
 def load_pretrained_model():
-    # model_checkpoint = "/home/ubuntu/work/zq/conoMLM/prot_bert/prot_bert"
-    model_checkpoint = "/home/ubuntu/work/gecheng/conoGen_final/FinalCono/MLM/prot_bert_finetuned_model_mlm_best"
+    model_checkpoint = "Rostlab/prot_bert"
     config = AutoConfig.from_pretrained(model_checkpoint)
     model = AutoModelForMaskedLM.from_config(config)
     
@@ -28,11 +27,11 @@ class ConoEncoder(nn.Module):
             param.requires_grad = False
         
         
-    def forward(self, x, mask):  # x:(128,54)  mask:(128,54)
-        feat = self.encoder(x, attention_mask=mask)  # (128,54,128)
-        feat = list(feat.values())[0] # (128,54,128)
+    def forward(self, x, mask):
+        feat = self.encoder(x, attention_mask=mask)
+        feat = list(feat.values())[0]
         
-        feat = self.trainable_encoder(feat, mask) # (128,54,128)
+        feat = self.trainable_encoder(feat, mask)
 
         return feat
 
@@ -53,9 +52,9 @@ class MSABlock(nn.Module):
                 nn.init.xavier_uniform_(layer.weight)
         # nn.init.xavier_uniform_(self.embedding.weight)
 
-    def forward(self, x):  # x: (128,3,54)
-        x = self.embedding(x) # x: (128,3,54,128)
-        x = self.mlp(x) # x: (128,3,54,128)
+    def forward(self, x):
+        x = self.embedding(x)
+        x = self.mlp(x)
         return x
 
 class ConoModel(nn.Module):
@@ -67,17 +66,14 @@ class ConoModel(nn.Module):
         self.decoder = decoder
 
     def forward(self, input_ids, msa, attn_idx=None):
-        # 仅使用 input_ids 作为输入，获取编码器输出
-        encoder_output = self.encoder.forward(input_ids, attn_idx) # (128,54,128)
-        msa_output = self.msa_block(msa) # (128,3,54,128)
-        # msa_output = torch.mean(msa_output, dim=1)
-        encoder_output = encoder_output.view(input_ids.shape[0], 54, -1).unsqueeze(1) # (128,1,54,128)
+        encoder_output = self.encoder.forward(input_ids, attn_idx)
+        msa_output = self.msa_block(msa)
+        encoder_output = encoder_output.view(input_ids.shape[0], 54, -1).unsqueeze(1)
         
-        output = torch.cat([encoder_output*5, msa_output], dim=1) # (128,4,54,128)
-        output = self.feature_combine(output) # (128,1,54,128)
-        output = output.squeeze(1) # (128,54,128)
-        # 解码器对编码器的输出进行解码
-        logits = self.decoder(output) # (128,54,85)
+        output = torch.cat([encoder_output*5, msa_output], dim=1)
+        output = self.feature_combine(output)
+        output = output.squeeze(1)
+        logits = self.decoder(output)
         
         return logits
 
