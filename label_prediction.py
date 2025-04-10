@@ -66,8 +66,8 @@ def CreoPep(ctxs, X1, X2, model):
 
 if __name__ == '__main__':
     parser.add_argument('-i', '--ctxs', default='./test/ctx.txt', required=True, type=str, help='Conotoxins: conotoxins need to be predicted.')
-    parser.add_argument('-s', '--subtype', default='X', type=str, help='Subtype: X if needs to be predicted.')
-    parser.add_argument('-p', '--potency', default='X', type=str, help='Potency: X if needs to be predicted.')
+    parser.add_argument('-is', '--subtype', default='X', type=str, help='Subtype: X if needs to be predicted.')
+    parser.add_argument('-ip', '--potency', default='X', type=str, help='Potency: X if needs to be predicted.')
     parser.add_argument('-m', '--model', default='./models/model_final.pt', type=str, help='Model: model parameters trained at different stages of data augmentation.')
     args = parser.parse_args()
     CreoPep(args.ctxs, args.subtype, args.potency,  args.model)
