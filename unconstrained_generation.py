@@ -4,6 +4,7 @@ import pandas as pd
 from creopep.utils import create_vocab, setup_seed
 from creopep.dataset_mlm import get_paded_token_idx_gen, add_tokens_to_vocab
 import argparse
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser('Unconstrained_generation', add_help=False)
 
@@ -51,7 +52,9 @@ def CreoPep(τ, g_num, start, end, model_name, seed, output):
                 '<Kshaker>', '<α3β4>', '<Na18>', '<α3β2>', '<α6α3β2β3>', '<α1β1δ>', '<α6α3β4β3>', '<α2β2>', '<α6β4>', '<α2β4>',
                 '<Na13>', '<Na12>', '<Na15>', '<α4β4>', '<α7α6β2>', '<α1β1γ>', '<NaTTXR>', '<K11>', '<Ca23>',
                 '<α9α10>', '<α6α3β4>', '<NaTTXS>', '<Na17>', '<high>', '<low>', '[UNK]', '[SEP]', '[PAD]', '[CLS]', '[MASK]']
-
+    
+    pbar = tqdm(total=gen_num, desc="Generating sequences")
+    
     while count < gen_num:
         new_seq = None
         gen_len = random.randint(int(start), int(end))
@@ -123,6 +126,9 @@ def CreoPep(τ, g_num, start, end, model_name, seed, output):
                 })
                 out.to_csv(output, index=False, encoding='utf-8-sig')
                 count += 1
+                pbar.update(1)
+                pbar.set_postfix({"Generated": count, "Written to CSV": len(generated_seqs_FINAL)})
+    pbar.close()
 
 if __name__ == '__main__':
     parser.add_argument('-t', '--temperature', default='1', type=int, help='τ: temperature factor controls the diversity of conotoxins generated. The higher the value, the higher the diversity.')
