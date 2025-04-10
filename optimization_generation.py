@@ -13,7 +13,7 @@ def temperature_sampling(logits, temperature):
     sampled_token = torch.multinomial(probabilities, 1)
     return sampled_token
 
-def CreoPep(X0, X3, X1, X2, τ, g_num, model_name, seed):
+def CreoPep(X0, X3, X1, X2, τ, g_num, model_name, seed, output):
     if seed =='random':
         seed = random.randint(0,100000)
         setup_seed(seed)
@@ -147,17 +147,18 @@ def CreoPep(X0, X3, X1, X2, τ, g_num, model_name, seed):
                         'Potency_probability': act_probability_all, 
                         'Random_seed': int(seed)
                     })
-                    out.to_csv("./test/output_optimization_generation.csv", index=False, encoding='utf-8-sig')
+                    out.to_csv(output, index=False, encoding='utf-8-sig')
                     count += 1
 
 if __name__ == '__main__':
     parser.add_argument('-i', '--ctx', default='GCCSDPRCAWRC', type=str, help='Conotoxin: a conotoxin that needs to be optimized. For example, GCCSDPRCAWRC.')
     parser.add_argument('-x', '--positions', default='GCCXXXXCAWRC', type=str, help='Positions: the positions that need to be optimized, replaced by X. For example, GCCXXXXCAWRC.')
-    parser.add_argument('-is', '--subtype', default='<α7>', type=str, help='Subtype: X if needs to be predicted.')
-    parser.add_argument('-ip', '--potency', default='<high>', type=str, help='Potency: X if needs to be predicted.')
+    parser.add_argument('-is', '--subtype', default='<α7>', type=str, help='subtype of action. For example, α7.')
+    parser.add_argument('-ip', '--potency', default='<high>', type=str, help='required potency. For example, High.')
     parser.add_argument('-t', '--temperature', default='1', type=int, help='τ: temperature factor controls the diversity of conotoxins generated. The higher the value, the higher the diversity.')
     parser.add_argument('-n', '--num', default='10', type=int, help='Number of generations')
     parser.add_argument('-m', '--model', default='./models/model_final.pt', type=str, help='Model: model parameters trained at different stages of data augmentation.')
     parser.add_argument('-s', '--seed', default='random', help='Seed: enter an integer as the random seed to ensure reproducible results. The default is random.')
+    parser.add_argument('-o', '--output', default='./test/output_optimization_generation.csv', help='output file')
     args = parser.parse_args()
-    CreoPep(args.ctx, args.positions, args.subtype, args.potency, args.temperature, args.num, args.model, args.seed)
+    CreoPep(args.ctx, args.positions, args.subtype, args.potency, args.temperature, args.num, args.model, args.seed, args.output)
