@@ -4,6 +4,7 @@ import pandas as pd
 from creopep.utils import create_vocab, setup_seed
 from creopep.dataset_mlm import  get_paded_token_idx_gen, add_tokens_to_vocab
 import argparse
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser('Optimization Generation', add_help=False)
 
@@ -80,6 +81,8 @@ def CreoPep(X0, X3, X1, X2, τ, g_num, model_name, seed, output):
     cls_proba_parent = cls_probability_parent[cls_pos_parent.index(X1)].item()
     act_proba_parent = act_probability_parent[act_pos_parent.index(X2)].item()
 
+    pbar = tqdm(total=gen_num, desc="Generating sequences")
+    
     while count < gen_num:
         new_seq = None
         gen_len = len(X3)
@@ -149,7 +152,9 @@ def CreoPep(X0, X3, X1, X2, τ, g_num, model_name, seed, output):
                     })
                     out.to_csv(output, index=False, encoding='utf-8-sig')
                     count += 1
-
+                    pbar.update(1)
+                    pbar.set_postfix({"Generated": count, "Written to CSV": len(generated_seqs_FINAL)})
+    pbar.close()
 if __name__ == '__main__':
     parser.add_argument('-i', '--ctx', default='GCCSDPRCAWRC', type=str, help='Conotoxin: a conotoxin that needs to be optimized. For example, GCCSDPRCAWRC.')
     parser.add_argument('-x', '--positions', default='GCCXXXXCAWRC', type=str, help='Positions: the positions that need to be optimized, replaced by X. For example, GCCXXXXCAWRC.')
