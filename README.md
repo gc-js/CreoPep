@@ -97,3 +97,7 @@ python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -i
 
 ## Model Training
 
+```bash
+python train.py
+```
+
