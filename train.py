@@ -2,7 +2,6 @@ import torch
 from tqdm import tqdm
 import numpy as np
 import pandas as pd
-
 from copy import deepcopy
 import pickle
 import torch.nn as nn
@@ -107,29 +106,25 @@ if __name__ == '__main__':
 
                     opt.zero_grad()
                     logits = cono_model(train_data, msa, attn)
-                    logits = logits.view(-1, len(vocab_mlm)) #(6912,85)
-                    label_reshape = label.view(-1) #(6912)
-                    pos_mask = (train_data==4) #(128,54)
-                    pos_mask = pos_mask.view(-1) #(6912)
-                    label_mask = torch.zeros_like(attn) #(128,54)
+                    logits = logits.view(-1, len(vocab_mlm))
+                    label_reshape = label.view(-1)
+                    pos_mask = (train_data==4)
+                    pos_mask = pos_mask.view(-1)
+                    label_mask = torch.zeros_like(attn)
                     label_mask[:, 1:3] = 1
-                    label_mask = label_mask.view(-1) #(6912)
+                    label_mask = label_mask.view(-1)
                     seq_mask = torch.ones_like(attn)
                     seq_mask[:, 0:3] = 0
                     seq_mask = seq_mask.view(-1)
-                
 
                     loss = loss_fct(logits, label_reshape, (pos_mask, label_mask, seq_mask))
                     loss.backward()
                     opt.step()
                     batch_loss.append(loss.item())
-
                     time_loss.append(np.mean(batch_loss))
                     
-            
                 valid_loss = eval_one_epoch(test_loader, cono_model, loss_fct, vocab_mlm, device)
                 time_val_loss.append(valid_loss)
-                # valid_loss = eval_one_epoch(test_loader, cono_model, t)
             ep_loss_train.append(np.mean(time_loss))
             ep_loss_val.append(np.mean(time_val_loss))
             print(f'[INFO] Epoch {ep} loss: {ep_loss_train[-1]}, valid loss: {ep_loss_val[-1]}')
@@ -137,8 +132,8 @@ if __name__ == '__main__':
 
             if valid_loss < best_loss:
                 best_loss = valid_loss
-                torch.save(cono_model.state_dict(), f'./models/mlm-model-param-{T}.pt')
-                torch.save(cono_model, f'./models/mlm-model-{T}.pt')
+                torch.save(cono_model.state_dict(), f'./models/model-param-{T}.pt')
+                torch.save(cono_model, f'./models/model-{T}.pt')
         all_ep_loss_train.append(ep_loss_train)
         all_ep_loss_val.append(ep_loss_val)
         
