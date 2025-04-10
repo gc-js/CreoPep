@@ -7,7 +7,7 @@ setup_seed(4)
 device = torch.device("cuda:0")
 parser = argparse.ArgumentParser('Label Prediction', add_help=False)
 
-def CreoPep(ctxs, X1, X2, model):
+def CreoPep(ctxs, X1, X2, model, output):
     with open(ctxs, 'r') as f:
         lines = f.readlines()
     Seq_all  = []
@@ -62,12 +62,13 @@ def CreoPep(ctxs, X1, X2, model):
         topk_all.append(Topk)
         data = {'Sequence': Seq_all, 'Subtype': subtype_all, 'Potency': potency_all, 'Topk': topk_all}
         df = pd.DataFrame(data)
-        df.to_csv('./test/result.csv', index=False, encoding='utf-8-sig')
+        df.to_csv(output, index=False, encoding='utf-8-sig')
 
 if __name__ == '__main__':
     parser.add_argument('-i', '--ctxs', default='./test/ctx.txt', required=True, type=str, help='Conotoxins: conotoxins need to be predicted.')
     parser.add_argument('-is', '--subtype', default='X', type=str, help='Subtype: X if needs to be predicted.')
     parser.add_argument('-ip', '--potency', default='X', type=str, help='Potency: X if needs to be predicted.')
     parser.add_argument('-m', '--model', default='./models/model_final.pt', type=str, help='Model: model parameters trained at different stages of data augmentation.')
+    parser.add_argument('-o', '--output', default='./test/output_optimization_generation.csv', help='output file')
     args = parser.parse_args()
-    CreoPep(args.ctxs, args.subtype, args.potency,  args.model)
+    CreoPep(args.ctxs, args.subtype, args.potency,  args.model, args.output)
