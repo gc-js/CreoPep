@@ -71,7 +71,7 @@ if __name__ == '__main__':
         for param in cono_model.decoder.parameters():
             param.requires_grad = True
         
-        show_parameters(cono_model, show_trainable=True)
+        #show_parameters(cono_model, show_trainable=True)
 
         # train settings
         opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=5e-5)
