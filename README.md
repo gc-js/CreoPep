@@ -28,7 +28,7 @@ python -m pip install -r requirements.txt
 #### Label_Prediction
 
 ```bash
-python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-27.pt
+python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-27.pt -o ./test/output_label_prediction.csv
 ```
 
 - `-i`: conotoxins need to be predicted.
@@ -49,6 +49,8 @@ python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-
 
 
 - `-m`: model parameters trained at different stages of data augmentation.
+
+- `-o`: output file (.csv)
 
 #### Unconstrained Generation
 
