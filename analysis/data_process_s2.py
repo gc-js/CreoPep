@@ -2,7 +2,7 @@ import os
 import random
 
 input_path = "./data/data_process_s1"
-output_path = "./data/data_process_s3"
+output_path = "./data/data_process_s2"
 dirs = os.listdir(input_path)
 
 for dir in dirs:
