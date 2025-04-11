@@ -4,13 +4,13 @@ This is the official repository for "CreoPep: A Universal Deep Learning Framewor
 ## ![Huggingface](https://img.shields.io/badge/Hugging%20Face-Spaces-brightgreen)
 We also host a trained version of the model on the HuggingFace Spaces, so you can start your inference using just your browser.
 
-🤗[Label_Prediction](https://huggingface.co/spaces/oucgc1996/CTXGen_Label_Prediction)
+🤗[Label prediction](https://huggingface.co/spaces/oucgc1996/CTXGen_Label_Prediction)
 
-🤗[Unconstrained_generation](https://huggingface.co/spaces/oucgc1996/CTXGen_Unconstrained_generation)
+🤗[Unconstrained generation](https://huggingface.co/spaces/oucgc1996/CTXGen_Unconstrained_generation)
 
-🤗[Conditional_generation](https://huggingface.co/spaces/oucgc1996/CTXGen_conditional_generation)
+🤗[Conditional generation](https://huggingface.co/spaces/oucgc1996/CTXGen_conditional_generation)
 
-🤗[Optimization_generation](https://huggingface.co/spaces/oucgc1996/CTXGen_optimization_generation)
+🤗[Optimization generation](https://huggingface.co/spaces/oucgc1996/CTXGen_optimization_generation)
 
 
 
