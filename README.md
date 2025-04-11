@@ -30,7 +30,7 @@ You can download the trained models [here](https://zenodo.org/records/15192592) 
 #### :one: Label_Prediction
 
 ```bash
-python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-27.pt -o ./test/output_label_prediction.csv
+python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/model_final.pt -o ./test/output_label_prediction.csv
 ```
 
 - `-i`: conotoxins need to be predicted.
@@ -57,7 +57,7 @@ python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-
 #### :two: Unconstrained Generation
 
 ```bash
-python unconstrained_generation.py -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_unconstrained_generation.csv
+python unconstrained_generation.py -t 1 -n 100 -b 12 -e 16 -m ./models/model_final.pt -s 666 -o ./test/output_unconstrained_generation.csv
 ```
 - `-t`: temperature factor (τ) controls the diversity of conotoxins generated. The higher the value, the higher the diversity.
 - `-n`: Number of generations: if it is not completed within 1200 seconds, it will automatically stop.
@@ -70,7 +70,7 @@ python unconstrained_generation.py -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model
 #### :three: Conditional Generation
 
 ```bash
-python conditional_generation.py -is "<α7>" -ip "<high>" -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_conditional_generation.csv
+python conditional_generation.py -is "<α7>" -ip "<high>" -t 1 -n 100 -b 12 -e 16 -m ./models/model_final.pt -s 666 -o ./test/output_conditional_generation.csv
 ```
 - `-is`: subtype of action. For example, `<α7>`.
 - `-ip`: required potency. For example, `<high>`.
@@ -85,7 +85,7 @@ python conditional_generation.py -is "<α7>" -ip "<high>" -t 1 -n 100 -b 12 -e 1
 #### :four: Optimization Generation
 
 ```bash
-python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -ip "<high>" -t 1 -n 100 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_optimization_generation.csv
+python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -ip "<high>" -t 1 -n 100 -m ./models/model_final.pt -s 666 -o ./test/output_optimization_generation.csv
 ```
 - `-i`: a conotoxin that needs to be optimized. For example, GCCSDPRCAWRC.
 - `-x`: the positions that need to be optimized, replaced by X. For example, GCCXXXXCAWRC.
