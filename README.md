@@ -25,6 +25,8 @@ python -m pip install -r requirements.txt
 
 ## :rocket: Get Started
 
+You can download the trained models [here](https://zenodo.org/records/15192592).
+
 #### :one: Label_Prediction
 
 ```bash
@@ -100,5 +102,4 @@ python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -i
 ```bash
 python train.py
 ```
-You can download the trained models [here](https://zenodo.org/records/15192592).
 
