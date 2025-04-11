@@ -14,7 +14,7 @@ We also host a trained version of the model on the HuggingFace Spaces, so you ca
 
 
 
-## Installation
+## :gear: Installation
 
 ```shell
 git clone git@github.com:gc-js/CreoPep.git
@@ -23,7 +23,7 @@ conda create -n CreoPep python=3.10.14
 python -m pip install -r requirements.txt
 ```
 
-## Get Started
+## :rocket: Get Started
 
 #### :one: Label_Prediction
 
@@ -95,9 +95,10 @@ python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -i
 - `-s`: Seed: enter an integer as the random seed to ensure reproducible results. The default is random.
 - `-o`: output file (.csv)
 
-## Model Training
+## :computer: Model Training
 
 ```bash
 python train.py
 ```
+You can download the trained models [here](https://zenodo.org/records/15192592).
 
