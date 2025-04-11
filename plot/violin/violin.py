@@ -1,9 +1,7 @@
 import plotly.graph_objects as go
 import pandas as pd
 
-df = pd.read_csv("foldx1.csv")
-# ['AchBP',"Cav22","α4β2","a9a10","a7","α3β4","Nav12","α3β2"]
-# ['AchBP',"Cav2.2","α4β2","α9α10","α7","α3β4","Nav1.2","α3β2"]
+df = pd.read_csv("violin.csv")
 tasks = ["AchBP","Cav2.2","α4β2","α9α10","α7","α3β4","Nav1.2","α3β2"]
 
 for task in tasks:
