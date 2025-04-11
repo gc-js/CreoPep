@@ -11,7 +11,6 @@ from creopep.dataset_mlm import  get_paded_token_idx, make_mask, add_tokens_to_v
 from creopep.model import  load_pretrained_model, ConoModel, MSABlock, ConoEncoder
 
 def eval_one_epoch(loader, cono_model, loss_fct, vocab_mlm, device):
-    """Evaluate one epoch on validation set"""
     cono_model.eval()
     batch_loss = []
     with torch.no_grad():
@@ -44,26 +43,20 @@ if __name__ == '__main__':
         setup_seed(42)
         device = torch.device('cuda:0')
         
-        # load vocab
         vocab_mlm = create_vocab()
         vocab_mlm = add_tokens_to_vocab(vocab_mlm)
 
-        # load pretrained model
         model = load_pretrained_model()
         model.resize_token_embeddings(len(vocab_mlm))
 
-        # cono_encoder 
         bert_part = model.bert
         cono_encoder = ConoEncoder(bert_part).to(device)
 
-        # msa_block
         msa_block = MSABlock(in_dim=128, out_dim=128, vocab_size=len(vocab_mlm)).to(device)
         cono_decoder = model.cls.to(device)
 
-        # integrate model
         cono_model = ConoModel(cono_encoder, msa_block, cono_decoder).to(device)
         
-        # freeze encoder
         for param in cono_model.encoder.parameters():
             param.requires_grad = False
         for param in cono_model.encoder.trainable_encoder.parameters():
@@ -73,11 +66,9 @@ if __name__ == '__main__':
         
         #show_parameters(cono_model, show_trainable=True)
 
-        # train settings
         opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=5e-5)
         loss_fct = CrossEntropyLossWithMask()
 
-        # prepare data
         padded_seq, idx_seq, idx_msa, attn_idx = get_paded_token_idx(vocab_mlm)
         labels = torch.tensor(idx_seq)
         idx_msa = torch.tensor(idx_msa)
@@ -135,7 +126,6 @@ if __name__ == '__main__':
         all_ep_loss_train.append(ep_loss_train)
         all_ep_loss_val.append(ep_loss_val)
         
-    # Plotting the loss curves for each T_step
     plt.figure(figsize=(10, 8))
     for i, T in enumerate(T_step):
         plt.plot(all_ep_loss_val[i],'-o', label=f"T={T}", markersize=3)
