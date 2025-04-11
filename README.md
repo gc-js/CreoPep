@@ -25,7 +25,7 @@ python -m pip install -r requirements.txt
 
 ## :rocket: Get Started
 
-You can download the trained models [here](https://zenodo.org/records/15192592).
+You can download the trained models [here](https://zenodo.org/records/15192592) and save them to `creopep/models`.
 
 #### :one: Label_Prediction
 
