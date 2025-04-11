@@ -25,7 +25,7 @@ python -m pip install -r requirements.txt
 
 ## Get Started
 
-#### Label_Prediction
+#### :one: Label_Prediction
 
 ```bash
 python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-27.pt -o ./test/output_label_prediction.csv
@@ -52,7 +52,7 @@ python label_prediction.py -i ./test/ctxs.txt -is X -ip X -m ./models/mlm-model-
 
 - `-o`: output file (.csv)
 
-#### Unconstrained Generation
+#### :two: Unconstrained Generation
 
 ```bash
 python unconstrained_generation.py -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_unconstrained_generation.csv
@@ -65,7 +65,7 @@ python unconstrained_generation.py -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model
 - `-s`: Seed: enter an integer as the random seed to ensure reproducible results. The default is random.
 - `-o`: output file (.csv)
 
-#### Conditional Generation
+#### :three: Conditional Generation
 
 ```bash
 python conditional_generation.py -is "<α7>" -ip "<high>" -t 1 -n 100 -b 12 -e 16 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_conditional_generation.csv
@@ -80,7 +80,7 @@ python conditional_generation.py -is "<α7>" -ip "<high>" -t 1 -n 100 -b 12 -e 1
 - `-s`: Seed: enter an integer as the random seed to ensure reproducible results. The default is random.
 - `-o`: output file (.csv)
 
-#### Optimization Generation
+#### :four: Optimization Generation
 
 ```bash
 python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -ip "<high>" -t 1 -n 100 -m ./models/mlm-model-27.pt -s 666 -o ./test/output_optimization_generation.csv
