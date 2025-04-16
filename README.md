@@ -24,13 +24,13 @@ conda activate CreoPep
 pip install -e .
 ```
 
-## :rocket: Get Started
-
 You can download the trained models [here](https://zenodo.org/records/15192592) and save them to `models`.
 
 ```bash
 bash download.sh
 ```
+
+## :rocket: Get Started
 
 #### :one: Label_Prediction
 
