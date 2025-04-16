@@ -1,6 +1,6 @@
 pandas
 scikit-learn
-numpy==1.24.4
-transformers==4.51.1
+numpy
+transformers
 torch==2.2.2
 matplotlib
