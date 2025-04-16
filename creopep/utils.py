@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from tqdm import tqdm
 import random
 from transformers import set_seed
-from creopep.vocab import PepVocab
+from vocab import PepVocab
 
 def create_vocab():
     vocab_mlm = PepVocab()
