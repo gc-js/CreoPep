@@ -12,6 +12,8 @@ def CreoPep(ctxs, X1, X2, output):
     subtype_all = []
     potency_all  = []
     topk_all = []
+    subtype_probability_all = []
+    potency_probability_all = []
 
     pbar = tqdm(lines, desc="Processing sequences")
     
@@ -42,24 +44,30 @@ def CreoPep(ctxs, X1, X2, output):
         if X1 != "X":
             Topk = X1
             Subtype = X1
-            Potency = padded_seq[2],predicted_token_probability_all[0]
+            Potency = padded_seq[2]
+            Potency_probability = predicted_token_probability_all[0]
         elif X2 != "X":
             Topk = cls_pos
-            Subtype = padded_seq[1],predicted_token_probability_all[0]
+            Subtype = padded_seq[1]
+            Subtype_probability = predicted_token_probability_all[0]
             Potency = X2
         else:
             Topk = cls_pos
-            Subtype = padded_seq[1],predicted_token_probability_all[0]
-            Potency = padded_seq[2],predicted_token_probability_all[1]
+            Subtype = padded_seq[1]
+            Subtype_probability = predicted_token_probability_all[0]
+            Potency = padded_seq[2]
+            Potency_probability = predicted_token_probability_all[1]
         Seq_all.append(X3.strip())
         subtype_all.append(Subtype)
         potency_all.append(Potency)
         topk_all.append(Topk)
+        subtype_probability_all.append(Subtype_probability)
+        potency_probability_all.append(Potency_probability)
         pbar.set_postfix({
             "Processed": len(Seq_all),
             "Current Seq": X3.strip()[:10] + "..." if len(X3) > 10 else X3.strip()
         })
-        data = {'Sequence': Seq_all, 'Subtype': subtype_all, 'Potency': potency_all, 'Topk': topk_all}
+        data = {'Sequence': Seq_all, 'Subtype': subtype_all, 'Subtype_probability': subtype_probability_all, 'Potency': potency_all, 'Potency_probability':potency_probability_all, 'Topk': topk_all}
         df = pd.DataFrame(data)
         df.to_csv(output, index=False, encoding='utf-8-sig')
 
