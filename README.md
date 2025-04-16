@@ -27,6 +27,10 @@ python -m pip install -r requirements.txt
 
 You can download the trained models [here](https://zenodo.org/records/15192592) and save them to `models`.
 
+```bash
+bash download.sh
+```
+
 #### :one: Label_Prediction
 
 ```bash
