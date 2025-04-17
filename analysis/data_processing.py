@@ -90,13 +90,11 @@ def process_stage3(base_dir, final_output_csv):
     """Process data stage 3: Create final CSV from processed FASTA files"""
     input_path = os.path.join(base_dir, "data_process_s2")
     output_path = os.path.join(base_dir, "data_process_s3")
-    
-    os.makedirs(output_path, exist_ok=True)
 
     # Use the user-specified output CSV path
-    csv_output_file = final_output_csv if final_output_csv else os.path.join(output_path, "conoData_final.csv")
+    csv_output_file = final_output_csv if final_output_csv else os.path.join(base_dir, "output.csv")
 
-    with open(csv_output_file, 'w', newline='', encoding='utf-8') as csvfile:
+    with open(csv_output_file, 'w', newline='', encoding='utf-8-sig') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(['Sequences'])
 
