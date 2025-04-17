@@ -4,7 +4,6 @@ import torch
 import numpy as np
 import torch.nn.functional as F
 from transformers import AutoModelForMaskedLM, AutoConfig
-
 from bertmodel import make_bert, make_bert_without_emb
 from utils import ContraLoss
     
@@ -76,95 +75,3 @@ class ConoModel(nn.Module):
         logits = self.decoder(output)
         
         return logits
-
-class ContraModel(nn.Module):
-    def __init__(self, cono_encoder):
-        super(ContraModel, self).__init__()
-        
-        self.contra_loss = ContraLoss()
-
-        self.encoder1 = cono_encoder
-        self.encoder2 = make_bert(404, 6, 128)
-
-        # contrastive decoder
-        self.lstm = nn.LSTM(16, 16, batch_first=True)
-        self.contra_decoder = nn.Sequential(
-            nn.Linear(128, 64),
-            nn.LeakyReLU(),
-            nn.Linear(64, 32),
-            nn.LeakyReLU(),
-            nn.Linear(32, 16),
-            nn.LeakyReLU(),
-            nn.Dropout(0.1),
-        )
-        
-        # classifier
-        self.pre_classifer = nn.LSTM(128, 64, batch_first=True)
-        self.classifer = nn.Sequential(
-            nn.Linear(128, 32),
-            nn.LeakyReLU(),
-            nn.Linear(32, 6),
-            nn.Softmax(dim=-1)
-        )
-
-        self.init()
-
-    def init(self):
-        
-        for layer in self.contra_decoder.children():
-            if isinstance(layer, nn.Linear):
-                nn.init.xavier_uniform_(layer.weight)
-        for layer in self.classifer.children():
-            if isinstance(layer, nn.Linear):
-                nn.init.xavier_uniform_(layer.weight)
-        for layer in self.pre_classifer.children():
-            if isinstance(layer, nn.Linear):
-                nn.init.xavier_uniform_(layer.weight)
-        for layer in self.lstm.children():
-            if isinstance(layer, nn.Linear):
-                nn.init.xavier_uniform_(layer.weight)
-
-    def compute_class_loss(self, feat1, feat2, labels):
-        _, cls_feat1= self.pre_classifer(feat1)
-        _, cls_feat2 = self.pre_classifer(feat2)
-        cls_feat1 = torch.cat([cls_feat1[0], cls_feat1[1]], dim=-1).squeeze(0)
-        cls_feat2 = torch.cat([cls_feat2[0], cls_feat2[1]], dim=-1).squeeze(0)
-
-        cls1_dis = self.classifer(cls_feat1)
-        cls2_dis = self.classifer(cls_feat2)
-        cls1_loss = F.cross_entropy(cls1_dis, labels.to('cuda:0'))
-        cls2_loss = F.cross_entropy(cls2_dis, labels.to('cuda:0'))
-        
-        return cls1_loss, cls2_loss
-
-    def compute_contrastive_loss(self, feat1, feat2):
-    
-        contra_feat1 = self.contra_decoder(feat1)
-        contra_feat2 = self.contra_decoder(feat2)
-        
-        _, feat1 = self.lstm(contra_feat1)
-        _, feat2 = self.lstm(contra_feat2)
-        feat1 = torch.cat([feat1[0], feat1[1]], dim=-1).squeeze(0)
-        feat2 = torch.cat([feat2[0], feat2[1]], dim=-1).squeeze(0)
-
-        ctr_loss = self.contra_loss(feat1, feat2)
-    
-        return ctr_loss
-    
-    def forward(self, x1, x2, labels=None):
-        loss = dict()
-
-        idx1, attn1 = x1
-        idx2, attn2 = x2
-        feat1 = self.encoder1(idx1.to('cuda:0'), attn1.to('cuda:0'))
-        feat2 = self.encoder2(idx2.to('cuda:0'), attn2.to('cuda:0'))
-        
-        cls1_loss, cls2_loss = self.compute_class_loss(feat1, feat2, labels)
-
-        ctr_loss = self.compute_contrastive_loss(feat1, feat2)
-
-        loss['cls1_loss'] = cls1_loss
-        loss['cls2_loss'] = cls2_loss
-        loss['ctr_loss'] = ctr_loss
-
-        return loss
