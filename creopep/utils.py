@@ -7,6 +7,7 @@ from tqdm import tqdm
 import random
 from transformers import set_seed
 from vocab import PepVocab
+import json
 
 def create_vocab():
     vocab_mlm = PepVocab()
@@ -127,3 +128,7 @@ def mask(x, start, end, time):
     for idx in mask_pos:
         x[idx]  = '[MASK]'
     return x
+    
+def read_config():
+    with open("config.json", 'r') as file:
+        return json.load(file)
