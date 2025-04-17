@@ -104,6 +104,15 @@ python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -i
 
 ## :computer: Model Training
 
+#### :one: Data_processing
+
+```bash
+python ./analysis/data_processing.py -i ./data/conoData5.csv -o ./data/conoData5_out.csv
+```
+- `-i`: Input data, the raw training data with column names: Seq, Target, Potency
+
+- `-o`: Output data, the processed data for CreoPep training (.csv)
+
 ```bash
 python train.py
 ```
