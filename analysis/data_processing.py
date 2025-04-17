@@ -2,11 +2,16 @@ import os
 import pandas as pd
 import random
 import csv
+import argparse
 
-def process_stage1():
+def get_base_directory(csv_path):
+    """Get the base directory from the input CSV path"""
+    return os.path.dirname(os.path.abspath(csv_path))
+
+def process_stage1(input_csv, output_dir):
     """Process data stage 1: Create FASTA files from input CSV"""
-    data = pd.read_csv("./data/conoData5.csv")
-    output_dir = "./data/data_process_s1/"
+    data = pd.read_csv(input_csv)
+    output_dir = os.path.join(output_dir, "data_process_s1")
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -33,14 +38,15 @@ def process_stage1():
                 fasta_file.write(f">{match_idx}\n")
                 fasta_file.write(f"{match}\n")
 
-def process_stage2():
+def process_stage2(base_dir):
     """Process data stage 2: Select random sequences from FASTA files"""
-    input_path = "./data/data_process_s1"
-    output_path = "./data/data_process_s2"
-    dirs = os.listdir(input_path)
+    input_path = os.path.join(base_dir, "data_process_s1")
+    output_path = os.path.join(base_dir, "data_process_s2")
     
     os.makedirs(output_path, exist_ok=True)
 
+    dirs = [f for f in os.listdir(input_path) if f.endswith('.fasta')]
+    
     for dir in dirs:
         dir_name = dir.split('.')[0]
         mafft_input = os.path.join(input_path, dir)
@@ -80,20 +86,22 @@ def process_stage2():
             for i, seq in enumerate(selected_sequences):
                 output_file.write(f">seq{i + 1}\n{seq}\n")
 
-def process_stage3():
+def process_stage3(base_dir, final_output_csv):
     """Process data stage 3: Create final CSV from processed FASTA files"""
-    input_path = "./data/data_process_s2"
-    output_path = "./data/data_process_s3"
-    dirs = os.listdir(input_path)
-
-    csv_output_file = os.path.join(output_path, "conoData_final.csv")
-
+    input_path = os.path.join(base_dir, "data_process_s2")
+    output_path = os.path.join(base_dir, "data_process_s3")
+    
     os.makedirs(output_path, exist_ok=True)
+
+    # Use the user-specified output CSV path
+    csv_output_file = final_output_csv if final_output_csv else os.path.join(output_path, "conoData_final.csv")
 
     with open(csv_output_file, 'w', newline='', encoding='utf-8') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(['Sequences'])
 
+        dirs = [f for f in os.listdir(input_path) if f.endswith('.fasta')]
+        
         for dir in dirs:
             dir_target = dir.split('_')[1]
             dir_value = (dir.split('_')[2]).split('.')[0]
@@ -115,17 +123,22 @@ def process_stage3():
                 csv_writer.writerow([result])
 
 def main():
-    """Main function to execute all processing stages"""
+    parser = argparse.ArgumentParser(description='Process Data through three stages')
+    parser.add_argument('-i', '--input', required=True, help='Path to input CSV file')
+    parser.add_argument('-o', '--output', help='Path to output final CSV file (optional)')
+    args = parser.parse_args()
+
+    # Get base directory from input CSV path
+    base_dir = get_base_directory(args.input)
+
     print("Starting stage 1 processing...")
-    process_stage1()
+    process_stage1(args.input, base_dir)
     
     print("Starting stage 2 processing...")
-    process_stage2()
+    process_stage2(base_dir)
     
     print("Starting stage 3 processing...")
-    process_stage3()
-    
-    print("All processing completed!")
+    process_stage3(base_dir, args.output)
 
 if __name__ == "__main__":
     main()
