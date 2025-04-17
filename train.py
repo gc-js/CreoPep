@@ -35,13 +35,24 @@ def eval_one_epoch(loader, cono_model, loss_fct, vocab_mlm, device):
         return total_loss
 
 if __name__ == '__main__':
-    T_step = [27]
+    parser = argparse.ArgumentParser(description='Train ConoModel with specified parameters.')
+    parser.add_argument('--T_step', type=int, nargs='+', default=[27],
+                       help='List of T steps to use (default: [27])')
+    parser.add_argument('--epochs', type=int, default=100,
+                       help='Number of epochs to train (default: 100)')
+    parser.add_argument('--Ir', default=5e-5,
+                       help='Learning rate (default: 5e-5)')
+    parser.add_argument('--device', type=str, default='cuda:0',
+                       help='Device to use for training (default: cuda:0)')
+    parser.add_argument('--seed', type=int, default='42',
+                       help='Random seed (default: 42)')
+    args = parser.parse_args()
+    
     all_ep_loss_train = []
     all_ep_loss_val = []
-    for T in T_step:
-        epochs = 100
-        setup_seed(42)
-        device = torch.device('cuda:0')
+    for T in args.T_step::
+        setup_seed(args.seed)
+        device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
         
         vocab_mlm = create_vocab()
         vocab_mlm = add_tokens_to_vocab(vocab_mlm)
@@ -66,7 +77,7 @@ if __name__ == '__main__':
         
         #show_parameters(cono_model, show_trainable=True)
 
-        opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=5e-5)
+        opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=args.Ir)
         loss_fct = CrossEntropyLossWithMask()
 
         padded_seq, idx_seq, idx_msa, attn_idx = get_paded_token_idx(vocab_mlm)
@@ -77,7 +88,7 @@ if __name__ == '__main__':
         ep_loss_train = []
         ep_loss_val = []
         best_loss = 1e5
-        for ep in range(epochs):
+        for ep in range(args.epochs):
             print(f'[INFO] Start training encoder model on {ep} epoch')
             cono_model.train()
 
