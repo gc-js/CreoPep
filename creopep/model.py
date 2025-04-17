@@ -5,10 +5,11 @@ import numpy as np
 import torch.nn.functional as F
 from transformers import AutoModelForMaskedLM, AutoConfig
 from bertmodel import make_bert, make_bert_without_emb
-from utils import ContraLoss
-    
+from utils import ContraLoss, read_config
+config = read_config()
+
 def load_pretrained_model():
-    model_checkpoint = "Rostlab/prot_bert"
+    model_checkpoint = config.model_checkpoint
     config = AutoConfig.from_pretrained(model_checkpoint)
     model = AutoModelForMaskedLM.from_config(config)
     
