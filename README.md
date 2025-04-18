@@ -104,7 +104,7 @@ python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -i
 
 ## :computer: Model Training
 
-#### :one: Data_processing
+#### :one: Data processing
 
 ```bash
 python ./analysis/data_processing.py -i ./data/conoData5.csv -o ./data/conoData5_out.csv
