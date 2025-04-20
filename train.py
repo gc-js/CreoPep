@@ -54,6 +54,8 @@ if __name__ == '__main__':
                        help='Proportion of test sets')
     parser.add_argument('--Ir', default='5e-5',
                        help='learning rate')
+    parser.add_argument('--vocab', default='./data/vocab.txt',
+                       help='Vocab path')
     parser.add_argument('--device', default='cuda:0',
                        help='Device to use for training')
     parser.add_argument('--seed', default='42',
