@@ -6,7 +6,6 @@ from torch.utils.data import TensorDataset, DataLoader
 from sklearn.model_selection import train_test_split
 from vocab import PepVocab
 from utils import mask, create_vocab
-device = torch.device(args.device)
 
 addtition_tokens = ['<K16>', '<α1β1γδ>', '<Ca22>', '<AChBP>', '<K13>', '<α1BAR>', '<α1β1ε>', '<α1AAR>', '<GluN3A>', '<α4β2>',
                      '<GluN2B>', '<α75HT3>', '<Na14>', '<α7>', '<GluN2C>', '<NET>', '<NavBh>', '<α6β3β4>', '<Na11>', '<Ca13>', 
@@ -44,8 +43,8 @@ def split_seq(seq, vocab, get_seq=False):
         # return [vocab.split_seq(msa1_seq)]  + [vocab.split_seq(msa2_seq)]  + [vocab.split_seq(msa3_seq)]
         return [add(vocab.split_seq(msa1_seq))]  + [add(vocab.split_seq(msa2_seq))]  + [add(vocab.split_seq(msa3_seq))]
 
-def get_paded_token_idx(vocab_mlm, args):
-    data_path = args.train_data
+def get_paded_token_idx(vocab_mlm, train_data_path):
+    data_path = train_data_path
     seq = pd.read_csv(data_path)['Sequences']
     
     splited_seq = list(seq.apply(split_seq, args=(vocab_mlm,True, )))
@@ -109,7 +108,7 @@ def get_paded_token_idx_gen(vocab_mlm, seq, new_seq):
         idx_seq = vocab_mlm.__getitem__(new_seq)
     return padded_seq, idx_seq, idx_msa, attn_idx
 
-def make_mask(seq_ser, start, end, time, vocab_mlm, labels, idx_msa, attn_idx):
+def make_mask(seq_ser, start, end, time, vocab_mlm, labels, idx_msa, attn_idx, test_size, batch_size, seed, device):
     seq_ser = pd.Series(seq_ser)
     masked_seq = seq_ser.apply(mask, args=(start, end, time))
     masked_idx = vocab_mlm.__getitem__(list(masked_seq))
@@ -117,9 +116,9 @@ def make_mask(seq_ser, start, end, time, vocab_mlm, labels, idx_msa, attn_idx):
     
     data_arrays = (masked_idx.to(device), labels.to(device), idx_msa.to(device), attn_idx.to(device)) 
     dataset = TensorDataset(*data_arrays)
-    train_dataset, test_dataset = train_test_split(dataset, test_size=args.test_size, random_state=args.seed, shuffle=True)
-    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True)
+    train_dataset, test_dataset = train_test_split(dataset, test_size=test_size, random_state=seed, shuffle=True)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
     
     return train_loader, test_loader
 
