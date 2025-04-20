@@ -39,9 +39,13 @@ def get_args():
     return parser.parse_args()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser() './models/best_model.pt'
     parser.add_argument('--train_data', default='./data/conoData_C5.csv',
                        help='train data (.csv)')
+    parser.add_argument('--model_save_path', default='./models/best_model.pt',
+                       help='Save path for model')
+    parser.add_argument('--loss_save_path', default='./imgs/Loss_curves.png',
+                       help='Save path for model')
     parser.add_argument('--PLM', default="Rostlab/prot_bert",
                        help='Protein language model')
     parser.add_argument('--time_step', type=int, default=27,
@@ -146,14 +150,14 @@ if __name__ == '__main__':
 
         if valid_loss < best_loss:
             best_loss = valid_loss
-            torch.save(cono_model, f'./models/best_model.pt')
+            torch.save(cono_model, args.model_save_path)
         
     plt.figure(figsize=(10, 8))
     plt.plot(ep_loss_val,'-o', markersize=3)
     plt.xticks(np.arange(0, epochs, step=10))
     plt.yticks(np.arange(0, 10, step=1))
     plt.ylim((0, 10))
-    plt.savefig(f"./imgs/Loss_curves.png")
+    plt.savefig(args.loss_save_path)
 
 
 
