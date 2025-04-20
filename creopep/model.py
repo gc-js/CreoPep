@@ -1,16 +1,13 @@
 import torch.nn as nn
 import copy, math
 import torch
-import train
 import numpy as np
 import torch.nn.functional as F
 from transformers import AutoModelForMaskedLM, AutoConfig
 from bertmodel import make_bert, make_bert_without_emb
-from utils import ContraLoss
-args = train.get_args()
 
-def load_pretrained_model():
-    model_checkpoint = args.PLM
+def load_pretrained_model(PLM):
+    model_checkpoint = PLM
     config = AutoConfig.from_pretrained(model_checkpoint)
     model = AutoModelForMaskedLM.from_config(config)
     
