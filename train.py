@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import argparse
 import pickle
 import numpy as np
 import pandas as pd
@@ -34,102 +35,109 @@ def eval_one_epoch(loader, cono_model, loss_fct, vocab_mlm, device):
         total_loss = np.mean(batch_loss)
         return total_loss
 
+def get_args():
+    return parser.parse_args()
+
 if __name__ == '__main__':
-    T_step = [27]
-    all_ep_loss_train = []
-    all_ep_loss_val = []
-    for T in T_step:
-        epochs = 100
-        setup_seed(42)
-        device = torch.device('cuda:0')
-        
-        vocab_mlm = create_vocab()
-        vocab_mlm = add_tokens_to_vocab(vocab_mlm)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--time_step', type=int, default=27,
+                       help='Time step to use (default: 27)')
+    parser.add_argument('--epochs', type=int, default=100,
+                       help='Number of epochs to train (default: 100)')
+    parser.add_argument('--Ir', default='5e-5',
+                       help='learning rate')
+    parser.add_argument('--device', default='cuda:0',
+                       help='Device to use for training (default: cuda:0)')
+    
+    args = get_args()
+    
+    T_step = args.time_step
 
-        model = load_pretrained_model()
-        model.resize_token_embeddings(len(vocab_mlm))
+    epochs = args.epochs
+    setup_seed(42)
+    device = torch.device(args.device)
+    
+    vocab_mlm = create_vocab()
+    vocab_mlm = add_tokens_to_vocab(vocab_mlm)
 
-        bert_part = model.bert
-        cono_encoder = ConoEncoder(bert_part).to(device)
+    model = load_pretrained_model()
+    model.resize_token_embeddings(len(vocab_mlm))
 
-        msa_block = MSABlock(in_dim=128, out_dim=128, vocab_size=len(vocab_mlm)).to(device)
-        cono_decoder = model.cls.to(device)
+    bert_part = model.bert
+    cono_encoder = ConoEncoder(bert_part).to(device)
 
-        cono_model = ConoModel(cono_encoder, msa_block, cono_decoder).to(device)
-        
-        for param in cono_model.encoder.parameters():
-            param.requires_grad = False
-        for param in cono_model.encoder.trainable_encoder.parameters():
-            param.requires_grad = True
-        for param in cono_model.decoder.parameters():
-            param.requires_grad = True
-        
-        #show_parameters(cono_model, show_trainable=True)
+    msa_block = MSABlock(in_dim=128, out_dim=128, vocab_size=len(vocab_mlm)).to(device)
+    cono_decoder = model.cls.to(device)
 
-        opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=5e-5)
-        loss_fct = CrossEntropyLossWithMask()
+    cono_model = ConoModel(cono_encoder, msa_block, cono_decoder).to(device)
+    
+    for param in cono_model.encoder.parameters():
+        param.requires_grad = False
+    for param in cono_model.encoder.trainable_encoder.parameters():
+        param.requires_grad = True
+    for param in cono_model.decoder.parameters():
+        param.requires_grad = True
+    
+    #show_parameters(cono_model, show_trainable=True)
 
-        padded_seq, idx_seq, idx_msa, attn_idx = get_paded_token_idx(vocab_mlm)
-        labels = torch.tensor(idx_seq)
-        idx_msa = torch.tensor(idx_msa)
-        attn_idx = torch.tensor(attn_idx)
+    opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=args.lr)
+    loss_fct = CrossEntropyLossWithMask()
 
-        ep_loss_train = []
-        ep_loss_val = []
-        best_loss = 1e5
-        for ep in range(epochs):
-            print(f'[INFO] Start training encoder model on {ep} epoch')
-            cono_model.train()
+    padded_seq, idx_seq, idx_msa, attn_idx = get_paded_token_idx(vocab_mlm)
+    labels = torch.tensor(idx_seq)
+    idx_msa = torch.tensor(idx_msa)
+    attn_idx = torch.tensor(attn_idx)
 
-            time_loss = []
-            time_val_loss = []
-            time_step = range(1, T+1)
-            for t in time_step:
-                padded_seq_copy = deepcopy(padded_seq)
-                labels_copy = deepcopy(labels)
-                train_loader, test_loader = make_mask(padded_seq_copy, start=0, end=53, time=t, 
-                                                    vocab_mlm=vocab_mlm, labels=labels_copy, idx_msa=idx_msa, attn_idx=attn_idx)
+    ep_loss_train = []
+    ep_loss_val = []
+    best_loss = 1e5
+    for ep in range(epochs):
+        print(f'[INFO] Start training encoder model on {ep} epoch')
+        cono_model.train()
+
+        time_loss = []
+        time_val_loss = []
+        time_step = range(1, T_step+1)
+        for t in time_step:
+            padded_seq_copy = deepcopy(padded_seq)
+            labels_copy = deepcopy(labels)
+            train_loader, test_loader = make_mask(padded_seq_copy, start=0, end=53, time=t, 
+                                                vocab_mlm=vocab_mlm, labels=labels_copy, idx_msa=idx_msa, attn_idx=attn_idx)
+            
+            for i, (train_data, label, msa, attn) in enumerate(train_loader):
+                batch_loss = []
+                opt.zero_grad()
+                logits = cono_model(train_data, msa, attn)
+                logits = logits.view(-1, len(vocab_mlm))
+                label_reshape = label.view(-1)
+                pos_mask = (train_data==4)
+                pos_mask = pos_mask.view(-1)
+                label_mask = torch.zeros_like(attn)
+                label_mask[:, 1:3] = 1
+                label_mask = label_mask.view(-1)
+                seq_mask = torch.ones_like(attn)
+                seq_mask[:, 0:3] = 0
+                seq_mask = seq_mask.view(-1)
+
+                loss = loss_fct(logits, label_reshape, (pos_mask, label_mask, seq_mask))
+                loss.backward()
+                opt.step()
+                batch_loss.append(loss.item())
+                time_loss.append(np.mean(batch_loss))
                 
-                for i, (train_data, label, msa, attn) in enumerate(train_loader):
-                    batch_loss = []
+            valid_loss = eval_one_epoch(test_loader, cono_model, loss_fct, vocab_mlm, device)
+            time_val_loss.append(valid_loss)
+        ep_loss_train.append(np.mean(time_loss))
+        ep_loss_val.append(np.mean(time_val_loss))
+        print(f'[INFO] Epoch {ep} loss: {ep_loss_train[-1]}, valid loss: {ep_loss_val[-1]}')
+        valid_loss = ep_loss_val[-1]
 
-                    opt.zero_grad()
-                    logits = cono_model(train_data, msa, attn)
-                    logits = logits.view(-1, len(vocab_mlm))
-                    label_reshape = label.view(-1)
-                    pos_mask = (train_data==4)
-                    pos_mask = pos_mask.view(-1)
-                    label_mask = torch.zeros_like(attn)
-                    label_mask[:, 1:3] = 1
-                    label_mask = label_mask.view(-1)
-                    seq_mask = torch.ones_like(attn)
-                    seq_mask[:, 0:3] = 0
-                    seq_mask = seq_mask.view(-1)
-
-                    loss = loss_fct(logits, label_reshape, (pos_mask, label_mask, seq_mask))
-                    loss.backward()
-                    opt.step()
-                    batch_loss.append(loss.item())
-                    time_loss.append(np.mean(batch_loss))
-                    
-                valid_loss = eval_one_epoch(test_loader, cono_model, loss_fct, vocab_mlm, device)
-                time_val_loss.append(valid_loss)
-            ep_loss_train.append(np.mean(time_loss))
-            ep_loss_val.append(np.mean(time_val_loss))
-            print(f'[INFO] Epoch {ep} loss: {ep_loss_train[-1]}, valid loss: {ep_loss_val[-1]}')
-            valid_loss = ep_loss_val[-1]
-
-            if valid_loss < best_loss:
-                best_loss = valid_loss
-                torch.save(cono_model.state_dict(), f'./models/model-param-{T}.pt')
-                torch.save(cono_model, f'./models/model-{T}.pt')
-        all_ep_loss_train.append(ep_loss_train)
-        all_ep_loss_val.append(ep_loss_val)
+        if valid_loss < best_loss:
+            best_loss = valid_loss
+            torch.save(cono_model, f'./models/best_model.pt')
         
     plt.figure(figsize=(10, 8))
-    for i, T in enumerate(T_step):
-        plt.plot(all_ep_loss_val[i],'-o', label=f"T={T}", markersize=3)
-
+    plt.plot(ep_loss_val,'-o', markersize=3)
     plt.xticks(np.arange(0, epochs, step=10))
     plt.yticks(np.arange(0, 10, step=1))
     plt.ylim((0, 10))
