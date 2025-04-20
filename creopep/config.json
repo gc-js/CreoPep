@@ -1,8 +1,0 @@
-{
-    "T_step": [27],
-    "epochs": 100,
-    "device": "cuda:0",
-    "model_checkpoint": "Rostlab/prot_bert",
-    "batch_size": 32,
-    "learning_rate": 5e-5
-}
