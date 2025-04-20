@@ -4,10 +4,8 @@ import numpy as np
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.model_selection import train_test_split
-import train
 from vocab import PepVocab
 from utils import mask, create_vocab
-args = train.get_args()
 device = torch.device(args.device)
 
 addtition_tokens = ['<K16>', '<α1β1γδ>', '<Ca22>', '<AChBP>', '<K13>', '<α1BAR>', '<α1β1ε>', '<α1AAR>', '<GluN3A>', '<α4β2>',
@@ -46,7 +44,7 @@ def split_seq(seq, vocab, get_seq=False):
         # return [vocab.split_seq(msa1_seq)]  + [vocab.split_seq(msa2_seq)]  + [vocab.split_seq(msa3_seq)]
         return [add(vocab.split_seq(msa1_seq))]  + [add(vocab.split_seq(msa2_seq))]  + [add(vocab.split_seq(msa3_seq))]
 
-def get_paded_token_idx(vocab_mlm):
+def get_paded_token_idx(vocab_mlm, args):
     data_path = args.train_data
     seq = pd.read_csv(data_path)['Sequences']
     
