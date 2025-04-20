@@ -8,10 +8,8 @@ import random
 from transformers import set_seed
 from vocab import PepVocab
 import json
-import train
-args = train.get_args()
 
-def create_vocab():
+def create_vocab(args):
     vocab_mlm = PepVocab()
     vocab_mlm.vocab_from_txt(args.vocab)
     return vocab_mlm
