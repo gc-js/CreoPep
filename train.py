@@ -99,7 +99,7 @@ if __name__ == '__main__':
     opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=args.lr)
     loss_fct = CrossEntropyLossWithMask()
 
-    padded_seq, idx_seq, idx_msa, attn_idx = get_paded_token_idx(vocab_mlm)
+    padded_seq, idx_seq, idx_msa, attn_idx = get_paded_token_idx(vocab_mlm, args)
     labels = torch.tensor(idx_seq)
     idx_msa = torch.tensor(idx_msa)
     attn_idx = torch.tensor(attn_idx)
