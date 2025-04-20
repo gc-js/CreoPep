@@ -73,7 +73,7 @@ if __name__ == '__main__':
     setup_seed(args.seed)
     device = torch.device(args.device)
     
-    vocab_mlm = create_vocab()
+    vocab_mlm = create_vocab(args) 
     vocab_mlm = add_tokens_to_vocab(vocab_mlm)
 
     model = load_pretrained_model()
