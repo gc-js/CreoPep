@@ -39,7 +39,7 @@ def get_args():
     return parser.parse_args()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser() './models/best_model.pt'
+    parser = argparse.ArgumentParser()
     parser.add_argument('--train_data', default='./data/conoData_C5.csv',
                        help='train data (.csv)')
     parser.add_argument('--model_save_path', default='./models/best_model.pt',
@@ -54,15 +54,15 @@ if __name__ == '__main__':
                        help='Number of epochs to train')
     parser.add_argument('--batch_size', type=int, default=128,
                        help='Batch size')
-    parser.add_argument('--test_size', default=0.1,
+    parser.add_argument('--test_size', default=0.1, type=float,
                        help='Proportion of test sets')
-    parser.add_argument('--Ir', default='5e-5',
+    parser.add_argument('--Ir', default='5e-5', type=float, 
                        help='learning rate')
     parser.add_argument('--vocab', default='./data/vocab.txt',
                        help='Vocab path')
     parser.add_argument('--device', default='cuda:0',
                        help='Device to use for training')
-    parser.add_argument('--seed', default='42',
+    parser.add_argument('--seed', default='42', type=int,
                        help='random seed')
     
     args = get_args()
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     vocab_mlm = create_vocab(args) 
     vocab_mlm = add_tokens_to_vocab(vocab_mlm)
 
-    model = load_pretrained_model()
+    model = load_pretrained_model(args.PLM)
     model.resize_token_embeddings(len(vocab_mlm))
 
     bert_part = model.bert
@@ -96,10 +96,10 @@ if __name__ == '__main__':
     
     #show_parameters(cono_model, show_trainable=True)
 
-    opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=args.lr)
+    opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=args.Ir)
     loss_fct = CrossEntropyLossWithMask()
 
-    padded_seq, idx_seq, idx_msa, attn_idx = get_paded_token_idx(vocab_mlm, args)
+    padded_seq, idx_seq, idx_msa, attn_idx = get_paded_token_idx(vocab_mlm, args.train_data)
     labels = torch.tensor(idx_seq)
     idx_msa = torch.tensor(idx_msa)
     attn_idx = torch.tensor(attn_idx)
@@ -118,7 +118,8 @@ if __name__ == '__main__':
             padded_seq_copy = deepcopy(padded_seq)
             labels_copy = deepcopy(labels)
             train_loader, test_loader = make_mask(padded_seq_copy, start=0, end=53, time=t, 
-                                                vocab_mlm=vocab_mlm, labels=labels_copy, idx_msa=idx_msa, attn_idx=attn_idx)
+                                                vocab_mlm=vocab_mlm, labels=labels_copy, idx_msa=idx_msa, attn_idx=attn_idx,
+                                                test_size=args.test_size, batch_size=args.batch_size, seed=args.seed, device=args.device)
             
             for i, (train_data, label, msa, attn) in enumerate(train_loader):
                 batch_loss = []
