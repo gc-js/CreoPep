@@ -114,6 +114,6 @@ python ./analysis/data_processing.py -i ./data/conoData5.csv -o ./data/conoData5
 - `-o`: Output data, the processed data for CreoPep training (.csv)
 
 ```bash
-python train.py
+python train.py --train_data ./data/conoData_C5.csv --PLM Rostlab/prot_bert  --time_step 27 --epochs 100 --batch_size 128 --test_size 0.1 --Ir 5e-5 --vocab ./data/vocab.txt --device cuda:0 --seed 42
 ```
 
