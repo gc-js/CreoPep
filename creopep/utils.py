@@ -8,11 +8,12 @@ import random
 from transformers import set_seed
 from vocab import PepVocab
 import json
+import train
+args = train.get_args()
 
 def create_vocab():
     vocab_mlm = PepVocab()
-    vocab_mlm.vocab_from_txt('./data/vocab.txt')
-    # vocab_mlm.token_to_idx['-'] = 23
+    vocab_mlm.vocab_from_txt(args.vocab)
     return vocab_mlm
 
 def show_parameters(model: nn.Module, show_all=False, show_trainable=True):
@@ -26,30 +27,6 @@ def show_parameters(model: nn.Module, show_all=False, show_trainable=True):
     if show_trainable:
         print('Trainable parameters:')
         print(list(filter(lambda x: x[1], list(mlp_pa.items()))))
-
-class ContraLoss(nn.Module):
-    def __init__(self, *args, **kwargs) -> None:
-        super(ContraLoss, self).__init__(*args, **kwargs)
-        
-        self.temp = 0.07
-
-    def contrastive_loss(self, proj1, proj2):
-        proj1 = F.normalize(proj1, dim=1)
-        proj2 = F.normalize(proj2, dim=1)
-        dot = torch.matmul(proj1, proj2.T) / self.temp
-        dot_max, _ = torch.max(dot, dim=1, keepdim=True)
-        dot = dot - dot_max.detach()
-
-        exp_dot = torch.exp(dot)
-        log_prob = torch.diag(dot, 0) - torch.log(exp_dot.sum(1))
-        cont_loss = -log_prob.mean()
-        return cont_loss
-    
-    def forward(self, x, y, label=None):
-        return self.contrastive_loss(x, y)
-
-
-
 
 def show_parameters(model: nn.Module, show_all=False, show_trainable=True):
 
@@ -102,7 +79,7 @@ class CrossEntropyLossWithMask(torch.nn.Module):
 
     def forward(self, y_pred, y_true, mask):
         (pos_mask, label_mask, seq_mask) = mask
-        loss = self.criterion(y_pred, y_true) # (6912)
+        loss = self.criterion(y_pred, y_true)
         
         pos_loss = (loss * pos_mask).sum() / torch.sum(pos_mask)
         label_loss = (loss * label_mask).sum() / torch.sum(label_mask)
@@ -128,7 +105,3 @@ def mask(x, start, end, time):
     for idx in mask_pos:
         x[idx]  = '[MASK]'
     return x
-    
-def read_config():
-    with open("config.json", 'r') as file:
-        return json.load(file)
