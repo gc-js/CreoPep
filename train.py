@@ -40,21 +40,31 @@ def get_args():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument('--train_data', default='./data/conoData_C5.csv',
+                       help='train data (.csv)')
+    parser.add_argument('--PLM', default="Rostlab/prot_bert",
+                       help='Protein language model')
     parser.add_argument('--time_step', type=int, default=27,
-                       help='Time step to use (default: 27)')
+                       help='Time step to use')
     parser.add_argument('--epochs', type=int, default=100,
-                       help='Number of epochs to train (default: 100)')
+                       help='Number of epochs to train')
+    parser.add_argument('--batch_size', type=int, default=128,
+                       help='Batch size')
+    parser.add_argument('--test_size', default=0.1,
+                       help='Proportion of test sets')
     parser.add_argument('--Ir', default='5e-5',
                        help='learning rate')
     parser.add_argument('--device', default='cuda:0',
-                       help='Device to use for training (default: cuda:0)')
+                       help='Device to use for training')
+    parser.add_argument('--seed', default='42',
+                       help='random seed')
     
     args = get_args()
     
     T_step = args.time_step
 
     epochs = args.epochs
-    setup_seed(42)
+    setup_seed(args.seed)
     device = torch.device(args.device)
     
     vocab_mlm = create_vocab()
