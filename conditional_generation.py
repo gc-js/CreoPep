@@ -22,7 +22,7 @@ def CreoPep(X1, X2, τ, g_num, start, end, model_name, seed, output):
         setup_seed(int(seed))
 
     device = torch.device("cuda:0") 
-    vocab_mlm = create_vocab()
+    vocab_mlm = create_vocab(args)
     vocab_mlm = add_tokens_to_vocab(vocab_mlm)
     save_path = model_name
     train_seqs = pd.read_csv('./data/C0_seq.csv') # Avoid generating peptides that duplicate those in the training set.
@@ -141,5 +141,6 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--model', default='./models/model_final.pt', type=str, help='Model: model parameters trained at different stages of data augmentation.')
     parser.add_argument('-s', '--seed', default='random', help='Seed: enter an integer as the random seed to ensure reproducible results. The default is random.')
     parser.add_argument('-o', '--output', default='./test/output_conditional_generation.csv', help='output file')
+    parser.add_argument('--vocab', default='./data/vocab.txt', help='Vocab path')
     args = parser.parse_args()
     CreoPep(args.subtype, args.potency, args.temperature, args.num, args.begin, args.end, args.model, args.seed, args.output)
