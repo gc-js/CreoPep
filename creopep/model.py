@@ -9,6 +9,23 @@ from bertmodel import make_bert, make_bert_without_emb
 def load_pretrained_model(PLM):
     model_checkpoint = PLM
     config = AutoConfig.from_pretrained(model_checkpoint)
+    config.update({
+          "architectures": [
+                  "BertForMaskedLM"
+                    ],
+            "attention_probs_dropout_prob": 0.3,
+            "hidden_act": "gelu",
+            "hidden_dropout_prob": 0.3,
+            "hidden_size": 128,
+            "initializer_range": 0.02,
+            "intermediate_size": 512,
+            "max_position_embeddings": 1000,
+            "num_attention_heads": 16,
+            "num_hidden_layers": 30,
+            "type_vocab_size": 2,
+            "vocab_size": 30
+                                }
+                    )
     model = AutoModelForMaskedLM.from_config(config)
     
     return model
