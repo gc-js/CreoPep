@@ -4,11 +4,14 @@ import time
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--path', type=str, help='Path of pdb file', required=True)
-parser.add_argument('--task', type=str, help='Name of wild type peptide', required=True)
-args = parser.parse_args()
+parser.add_argument('--pdb_path', type=str, help='Path of wild type peptide pdb file', required=True)
+parser.add_argument('--mutants', type=str, help='Path of mutants sequence file with column names: generated_seq (.csv)', required=True)
+parser.add_argument('--task', type=str, help='Name of task', required=True)
+parser.add_argument('--output', type=str, help='Path of output file', required=True)
 
-st = Structure(f"{args.task}", f"{args.path}/{args.task}.pdb")
+args = parser.parse_args()    
+
+st = Structure(f"{args.task}", args.pdb_path)
 
 receptor_seq = st.getSequence(chain="A")
 receptor_residues = [f"{receptor_seq[i]}A{i+1}" for i in range(len(receptor_seq))]
@@ -19,7 +22,7 @@ ori_Interaction_Energy = st.getInterfaceEnergy()['Interaction Energy'][('A', 'C'
 print(float(ori_Interaction_Energy))
 
 ori_seq = st.getSequence(chain="C")
-path = f'{args.path}/output_{args.task}.csv'
+path = args.mutants
 df = pd.read_csv(path)
 mutate_seq = df['generated_seq'].tolist()
 
@@ -49,4 +52,4 @@ for i in mutate_seq:
     saved_seq.append(i)
     saved_value.append(value)
     df = pd.DataFrame({'Seq': saved_seq, 'Value': saved_value})
-    df.to_csv(f"{args.path}/foldx_output_{args.task}.csv", index=False)
+    df.to_csv(args.output, index=False)
