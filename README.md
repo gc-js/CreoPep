@@ -132,4 +132,7 @@ python train.py --train_data ./data/conoData_C5.csv --model_save_path ./models/b
 - `--device`: Device to use for training.
 - `--seed`: Random seed.
 
+#### :three: Data augmentation
+python ./data_augmentation/foldx.py 
+
 
