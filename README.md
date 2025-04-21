@@ -134,7 +134,7 @@ python train.py --train_data ./data/conoData_C5.csv --model_save_path ./models/b
 
 #### :three: Data augmentation
 
-- You can download the Foldx [here](https://foldxsuite.crg.eu/).
+- You can obtain Foldx for free upon registration [here](https://foldxsuite.crg.eu/).
 
 - And, install pyfoldx [here](https://github.com/leandroradusky/pyfoldx).
 
@@ -149,3 +149,17 @@ python ./data_augmentation/foldx.py --pdb_path ./data_augmentation/pdb/a7/a7.pdb
 - `--task`: Name of task.
 - `--output`: Path of output file.
 
+#### 💥 *Note*:
+
+- Put FoldX executable into /usr/bin/
+
+- Add the following line to your ~/.bashrc:
+```bash
+export FOLDX_BINARY=/usr/bin/foldx
+export PATH=$PATH:/usr/bin/foldx
+```
+
+- Add permission.
+```bash
+sudo chmod 777 /usr/bin/foldx
+```
