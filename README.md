@@ -136,7 +136,9 @@ python train.py --train_data ./data/conoData_C5.csv --model_save_path ./models/b
 
 - You can download the Foldx [here](https://foldxsuite.crg.eu/).
 
-- Then, install pyfoldx [here](https://github.com/leandroradusky/pyfoldx).
+- And, install pyfoldx [here](https://github.com/leandroradusky/pyfoldx).
+
+- Then, running:
 
 ```bash
 python ./data_augmentation/foldx.py --pdb_path ./data_augmentation/pdb/a7/a7.pdb --mutants ./data_augmentation/pdb/a7/output_a7.csv --task a7 --output ./data_augmentation/pdb/a7/foldx_a7_out.csv
