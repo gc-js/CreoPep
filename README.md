@@ -122,7 +122,7 @@ python train.py --train_data ./data/conoData_C5.csv --model_save_path ./models/b
 - `--loss_save_path`: Loss curves for model.
 - `--PLM`: Protein language model.
 - `--PLM_config`: PLM config. You can modify it [here](https://github.com/gc-js/CreoPep/blob/main/models/PLM_config.json).
-- `--vocab`: Vocab file path.
+- `--vocab`: Vocab file path. You can modify it [here](https://github.com/gc-js/CreoPep/blob/main/data/vocab.txt)
 - `--time_step`: Time step to use.
 - `--epochs`: Number of epochs for training.
 - `--batch_size`: Batch size for training.
