@@ -127,7 +127,7 @@ python train.py --train_data ./data/conoData_C5.csv --model_save_path ./models/b
 - `--epochs`: Number of epochs for training.
 - `--batch_size`: Batch size for training.
 - `--test_size`: Proportion of test sets.
-- `--Ir`: Learning rate for training.
+- `--lr`: Learning rate for training.
 - `--device`: Device to use for training.
 - `--seed`: Random seed.
 
