@@ -3,9 +3,9 @@ import pandas as pd
 import time
 import argparse
 
-parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('--path', type=str, help='Path to the directory containing the data files', required=True)
-parser.add_argument('--task', type=str, help='Path to the directory containing the data files', required=True)
+parser = argparse.ArgumentParser()
+parser.add_argument('--path', type=str, help='Path of pdb file', required=True)
+parser.add_argument('--task', type=str, help='Name of wild type peptide', required=True)
 args = parser.parse_args()
 
 st = Structure(f"{args.task}", f"{args.path}/{args.task}.pdb")
