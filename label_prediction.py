@@ -83,7 +83,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     setup_seed(4)
     device = torch.device("cuda:0")
-    vocab_mlm = create_vocab()
+    vocab_mlm = create_vocab(args)
     vocab_mlm = add_tokens_to_vocab(vocab_mlm)
     save_path = args.model
     model = torch.load(save_path, weights_only=False)
