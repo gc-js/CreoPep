@@ -107,7 +107,7 @@ python optimization_generation.py -i GCCSDPRCAWRC -x GCCXXXXCAWRC -is "<α7>" -i
 #### :one: Data processing
 
 ```bash
-python ./analysis/data_processing.py -i ./data/conoData5.csv -o ./data/conoData5_out.csv
+python ./analysis/data_processing.py -i ./data/conoData5.csv -o ./data/conoData_C5.csv
 ```
 - `-i`: Input data, the raw training data with column names: Seq, Target, Potency (.csv)
 
