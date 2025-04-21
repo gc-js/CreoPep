@@ -133,6 +133,11 @@ python train.py --train_data ./data/conoData_C5.csv --model_save_path ./models/b
 - `--seed`: Random seed.
 
 #### :three: Data augmentation
-python ./data_augmentation/foldx.py 
+```bash
+python ./data_augmentation/foldx.py --path ./data_augmentation/pdb/a7 --task a7
+```
+
+- `--path`: Path of wild type peptide pdb file.
+- `--task`: Name of task name.
 
 
