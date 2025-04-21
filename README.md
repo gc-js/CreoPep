@@ -114,6 +114,21 @@ python ./analysis/data_processing.py -i ./data/conoData5.csv -o ./data/conoData5
 - `-o`: Output data, the processed data for CreoPep training (.csv)
 
 ```bash
-python train.py --train_data ./data/conoData_C5.csv --model_save_path ./models/best_model.pt --loss_save_path ./imgs/Loss_curves.png --PLM Rostlab/prot_bert  --time_step 27 --epochs 100 --batch_size 128 --test_size 0.1 --Ir 5e-5 --vocab ./data/vocab.txt --device cuda:0 --seed 42
+python train.py --train_data ./data/conoData_C5.csv --model_save_path ./models/best_model.pt --loss_save_path ./imgs/Loss_curves.png --PLM Rostlab/prot_bert --time_step 27 --epochs 100 --batch_size 128 --test_size 0.1 --Ir 5e-5 --vocab ./data/vocab.txt --device cuda:0 --seed 42
 ```
+
+- `--train_data`: Train data, the raw training data with column names: Sequences. (.csv)
+- `--model_save_path`: Save path for model.
+- `--loss_save_path`: Loss curves for model.
+- `--PLM`: Protein language model.
+- `--PLM_config`: PLM config. You can modify it [here](https://github.com/gc-js/CreoPep/blob/main/models/PLM_config.json).
+- `--vocab`: Vocab file path.
+- `--time_step`: Time step to use.
+- `--epochs`: Number of epochs for training.
+- `--batch_size`: Batch size for training.
+- `--test_size`: Proportion of test sets.
+- `--Ir`: Learning rate for training.
+- `--device`: Device to use for training.
+- `--seed`: Random seed.
+
 
