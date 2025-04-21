@@ -45,9 +45,13 @@ if __name__ == '__main__':
     parser.add_argument('--model_save_path', default='./models/best_model.pt',
                        help='Save path for model')
     parser.add_argument('--loss_save_path', default='./imgs/Loss_curves.png',
-                       help='Save path for model')
+                       help='Loss curves for model')
     parser.add_argument('--PLM', default="Rostlab/prot_bert",
                        help='Protein language model')
+    parser.add_argument('--PLM_config', default='./models/PLM_config.json',
+                                   help='PLM config')
+    parser.add_argument('--vocab', default='./data/vocab.txt',
+                       help='Vocab path')
     parser.add_argument('--time_step', type=int, default=27,
                        help='Time step to use')
     parser.add_argument('--epochs', type=int, default=100,
@@ -58,14 +62,11 @@ if __name__ == '__main__':
                        help='Proportion of test sets')
     parser.add_argument('--Ir', default='5e-5', type=float, 
                        help='learning rate')
-    parser.add_argument('--vocab', default='./data/vocab.txt',
-                       help='Vocab path')
     parser.add_argument('--device', default='cuda:0',
                        help='Device to use for training')
     parser.add_argument('--seed', default='42', type=int,
                        help='random seed')
-    parser.add_argument('--PLM_config', default='./models/PLM_config.json',
-                                   help='PLM config')
+
     
     args = get_args()
     
