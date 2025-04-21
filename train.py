@@ -64,6 +64,8 @@ if __name__ == '__main__':
                        help='Device to use for training')
     parser.add_argument('--seed', default='42', type=int,
                        help='random seed')
+    parser.add_argument('--PLM_config', default='./models/PLM_config.json',
+                                   help='PLM config')
     
     args = get_args()
     
