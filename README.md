@@ -133,11 +133,17 @@ python train.py --train_data ./data/conoData_C5.csv --model_save_path ./models/b
 - `--seed`: Random seed.
 
 #### :three: Data augmentation
+
+- You can download the Foldx [here](https://foldxsuite.crg.eu/).
+
+- Then, install pyfoldx [here](https://github.com/leandroradusky/pyfoldx).
+
 ```bash
-python ./data_augmentation/foldx.py --path ./data_augmentation/pdb/a7 --task a7
+python ./data_augmentation/foldx.py --pdb_path ./data_augmentation/pdb/a7/a7.pdb --mutants ./data_augmentation/pdb/a7/output_a7.csv --task a7 --output ./data_augmentation/pdb/a7/foldx_a7_out.csv
 ```
 
-- `--path`: Path of wild type peptide pdb file.
-- `--task`: Name of task name.
-
+- `--pdb_path`: Path of wild type peptide pdb file.
+- `--mutants`: Path of mutants sequence file with column names: generated_seq (.csv).
+- `--task`: Name of task.
+- `--output`: Path of output file.
 
