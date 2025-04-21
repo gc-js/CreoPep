@@ -60,7 +60,7 @@ if __name__ == '__main__':
                        help='Batch size')
     parser.add_argument('--test_size', default=0.1, type=float,
                        help='Proportion of test sets')
-    parser.add_argument('--Ir', default='5e-5', type=float, 
+    parser.add_argument('--lr', default='5e-5', type=float, 
                        help='learning rate')
     parser.add_argument('--device', default='cuda:0',
                        help='Device to use for training')
@@ -99,7 +99,7 @@ if __name__ == '__main__':
     
     #show_parameters(cono_model, show_trainable=True)
 
-    opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=args.Ir)
+    opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=args.lr) 
     loss_fct = CrossEntropyLossWithMask()
 
     padded_seq, idx_seq, idx_msa, attn_idx = get_paded_token_idx(vocab_mlm, args.train_data)
