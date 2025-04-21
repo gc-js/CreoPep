@@ -79,7 +79,7 @@ if __name__ == '__main__':
     vocab_mlm = create_vocab(args) 
     vocab_mlm = add_tokens_to_vocab(vocab_mlm)
 
-    model = load_pretrained_model(args.PLM)
+    model = load_pretrained_model(args)
     model.resize_token_embeddings(len(vocab_mlm))
 
     bert_part = model.bert
