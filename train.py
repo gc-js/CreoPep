@@ -7,38 +7,46 @@ import pandas as pd
 from tqdm import tqdm
 from copy import deepcopy
 import matplotlib.pyplot as plt
+
 from creopep.utils import setup_seed, CrossEntropyLossWithMask, show_parameters, create_vocab
 from creopep.dataset_mlm import  get_paded_token_idx, make_mask, add_tokens_to_vocab
 from creopep.model import  load_pretrained_model, ConoModel, MSABlock, ConoEncoder
 
-def eval_one_epoch(loader, cono_model, loss_fct, vocab_mlm, device):
+def eval_one_epoch(loader, cono_model, args):
     cono_model.eval()
+    device = args.device
     batch_loss = []
     with torch.no_grad():
         for i, (data, label, msa, attn) in enumerate(loader):
             logits = cono_model(data.to(device), msa.to(device), attn.to(device))
-            logits = logits.view(-1, len(vocab_mlm))
+            logits = logits.view(-1, args.vocab_size)
             label_reshape = label.view(-1).to(device)
             
-            pos_mask = (data == 4).view(-1).to(device)
-            label_mask = torch.zeros_like(attn)
-            label_mask[:, 1:3] = 1
-            label_mask = label_mask.view(-1).to(device)
+            loss = compute_loss(data, label_reshape, logits, attn)
             
-            seq_mask = torch.ones_like(attn)
-            seq_mask[:, 0:3] = 0
-            seq_mask = seq_mask.view(-1).to(device)
-
-            loss = loss_fct(logits, label_reshape, (pos_mask, label_mask, seq_mask))
             batch_loss.append(loss.item())
         
         total_loss = np.mean(batch_loss)
         return total_loss
+    
+def compute_loss(train_data, label_reshape, logits, attn):
+    
+    pos_mask = (train_data==4)
+    pos_mask = pos_mask.view(-1)
+    label_mask = torch.zeros_like(attn)
+    label_mask[:, 1:3] = 1
+    label_mask = label_mask.view(-1)
+    seq_mask = torch.ones_like(attn)
+    seq_mask[:, 0:3] = 0
+    seq_mask = seq_mask.view(-1)
+
+    loss = loss_fct(logits, label_reshape, (pos_mask, label_mask, seq_mask))
+    
+    return loss
+    
 
 def get_args():
-    return parser.parse_args()
-
-if __name__ == '__main__':
+    
     parser = argparse.ArgumentParser()
     parser.add_argument('--train_data', default='./data/conoData_C5.csv',
                        help='train data (.csv)')
@@ -66,27 +74,20 @@ if __name__ == '__main__':
                        help='Device to use for training')
     parser.add_argument('--seed', default='42', type=int,
                        help='random seed')
-
     
-    args = get_args()
-    
-    T_step = args.time_step
+    return parser.parse_args()
 
-    epochs = args.epochs
-    setup_seed(args.seed)
+def init_model(args):
     device = torch.device(args.device)
     
-    vocab_mlm = create_vocab(args) 
-    vocab_mlm = add_tokens_to_vocab(vocab_mlm)
-
     model = load_pretrained_model(args)
-    model.resize_token_embeddings(len(vocab_mlm))
+    model.resize_token_embeddings(args.vocab_size)
 
     bert_part = model.bert
-    cono_encoder = ConoEncoder(bert_part).to(device)
+    cono_encoder = ConoEncoder(bert_part)
 
-    msa_block = MSABlock(in_dim=128, out_dim=128, vocab_size=len(vocab_mlm)).to(device)
-    cono_decoder = model.cls.to(device)
+    msa_block = MSABlock(in_dim=128, out_dim=128, vocab_size=args.vocab_size)
+    cono_decoder = model.cls
 
     cono_model = ConoModel(cono_encoder, msa_block, cono_decoder).to(device)
     
@@ -97,7 +98,26 @@ if __name__ == '__main__':
     for param in cono_model.decoder.parameters():
         param.requires_grad = True
     
-    #show_parameters(cono_model, show_trainable=True)
+    return cono_model
+    
+
+if __name__ == '__main__':
+    
+    args = get_args()
+    args.device = 'cpu'
+    
+    T_step = args.time_step
+
+    epochs = args.epochs
+    setup_seed(args.seed)
+
+    vocab_mlm = create_vocab(args) 
+    vocab_mlm = add_tokens_to_vocab(vocab_mlm)
+    
+    args.vocab_size = len(vocab_mlm)
+
+    cono_model = init_model(args)
+    show_parameters(cono_model, show_trainable=True)
 
     opt = torch.optim.AdamW(filter(lambda p: p.requires_grad, cono_model.parameters()), lr=args.lr) 
     loss_fct = CrossEntropyLossWithMask()
@@ -128,24 +148,17 @@ if __name__ == '__main__':
                 batch_loss = []
                 opt.zero_grad()
                 logits = cono_model(train_data, msa, attn)
-                logits = logits.view(-1, len(vocab_mlm))
+                
+                logits = logits.view(-1, args.vocab_size)
                 label_reshape = label.view(-1)
-                pos_mask = (train_data==4)
-                pos_mask = pos_mask.view(-1)
-                label_mask = torch.zeros_like(attn)
-                label_mask[:, 1:3] = 1
-                label_mask = label_mask.view(-1)
-                seq_mask = torch.ones_like(attn)
-                seq_mask[:, 0:3] = 0
-                seq_mask = seq_mask.view(-1)
-
-                loss = loss_fct(logits, label_reshape, (pos_mask, label_mask, seq_mask))
+                
+                loss = compute_loss(train_data, label_reshape, logits, attn)
                 loss.backward()
                 opt.step()
                 batch_loss.append(loss.item())
                 time_loss.append(np.mean(batch_loss))
                 
-            valid_loss = eval_one_epoch(test_loader, cono_model, loss_fct, vocab_mlm, device)
+            valid_loss = eval_one_epoch(test_loader, cono_model, args)
             time_val_loss.append(valid_loss)
         ep_loss_train.append(np.mean(time_loss))
         ep_loss_val.append(np.mean(time_val_loss))
