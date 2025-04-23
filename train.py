@@ -104,10 +104,7 @@ def init_model(args):
 if __name__ == '__main__':
     
     args = get_args()
-    args.device = 'cpu'
-    
     T_step = args.time_step
-
     epochs = args.epochs
     setup_seed(args.seed)
 
