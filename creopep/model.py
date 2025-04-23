@@ -5,7 +5,8 @@ import torch
 import numpy as np
 import torch.nn.functional as F
 from transformers import AutoModelForMaskedLM, AutoConfig
-from bertmodel import make_bert, make_bert_without_emb
+
+from creopep.bertmodel import make_bert, make_bert_without_emb
 
 def load_pretrained_model(args):
     model_checkpoint = args.PLM
