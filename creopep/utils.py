@@ -1,13 +1,11 @@
 import torch.nn as nn
-import copy, math
 import torch
 import numpy as np
-import torch.nn.functional as F
 from tqdm import tqdm
 import random
 from transformers import set_seed
-from vocab import PepVocab
-import json
+
+from creopep.vocab import PepVocab
 
 def create_vocab(args):
     vocab_mlm = PepVocab()
