@@ -31,23 +31,8 @@ class PepVocab:
         if not isinstance(tokens, (list, tuple)):
             # return self.token_to_idx.get(tokens)
             return self.token_to_idx[tokens]
-        return [self.__getitem__(token) for token in tokens]
+        return [self[token] for token in tokens]
     
-    def vocab_from_txt(self, path):
-        '''
-        note: this function use for constructing vocab mapping
-        but it is only suitable for special txt format
-        it support one column txt file, which column name is 0
-        '''
-        token_to_idx = {}
-        idx_to_token = {}
-        chr_idx = pd.read_csv(path, header=None, sep='\t')
-        if chr_idx.shape[1] == 1:
-            for idx, token in enumerate(chr_idx[0]):
-                token_to_idx[token] = idx
-                idx_to_token[idx] = token
-        self.token_to_idx = token_to_idx
-        self.idx_to_token = idx_to_token
         
     def to_tokens(self, indices):
         '''
@@ -56,15 +41,6 @@ class PepVocab:
         if hasattr(indices, '__len__') and len(indices) > 1:
             return [self.idx_to_token[int(index)] for index in indices]
         return self.idx_to_token[indices]
-    
-    def add_special_token(self, token: str|list|tuple) -> None:
-        if not isinstance(token, (list, tuple)):
-            if token in self.token_to_idx:
-                raise ValueError(f"token {token} already in the vocab")
-            self.idx_to_token[len(self.idx_to_token)] = token
-            self.token_to_idx[token] = len(self.token_to_idx)
-        else:
-            [self.add_special_token(t) for t in token]
         
     def split_seq(self, seq: str|list|tuple) -> list:
         if not isinstance(seq, (list, tuple)):
@@ -89,105 +65,28 @@ class PepVocab:
         self.attention_mask = []
         return attention_mask
 
-    def seq_to_idx(self, seq: str|list|tuple, num_steps: int, padding_token='<PAD>') -> list:
-        '''
-        note: ensure to execut this function after add_special_token
-        '''
-
-        splited_seq = self.split_seq(seq)
-        # **********************
-        # after split, we need to mask sequence
-        # note: 
-        # 1. mask tokens by probability
-        # 2. return a list or list of list
-        # **********************
-        padded_seq = self.truncate_pad(splited_seq, num_steps, padding_token)
-
-        return self.__getitem__(padded_seq)
-
-
-
-class MutilVocab:
-    def __init__(self, data, AA_tok_len=2):
-        """
-        Args:
-            data (_type_):
-            AA_tok_len (int, optional): Defaults to 1.
-            start_token (bool, optional): True is required for encoder-based model.
-        """
-        ## Load train dataset
-        self.x_data = data
-        self.tok_AA_len = AA_tok_len
-        self.default_AA = list("RHKDESTNQCGPAVILMFYW")
-        # AAs which are not included in default_AA
-        self.tokens = self._token_gen(self.tok_AA_len)
-
-        self.token_to_idx = {k: i + 4 for i, k in enumerate(self.tokens)}
-        self.token_to_idx["[PAD]"] = 0  ## idx as 0 is PAD
-        self.token_to_idx["[CLS]"] = 1  ## idx as 1 is CLS
-        self.token_to_idx["[SEP]"] = 2  ## idx as 2 is SEP
-        self.token_to_idx["[MASK]"] = 3  ## idx as 3 is MASK
-        
-    def split_seq(self):
-        self.X = [self._seq_to_tok(seq) for seq in self.x_data]
-        return self.X
-    
-    def tok_idx(self, seqs):
-        '''
-        note: ensure to execut this function before truancate_pad
-        '''
-
-        seqs_idx = []
-        for seq in seqs:
-            seq_idx = []
-            for s in seq:
-                seq_idx.append(self.token_to_idx[s])
-            seqs_idx.append(seq_idx)
-
-        return seqs_idx
-
-
-
-    def _token_gen(self, tok_AA_len: int, st: str = "", curr_depth: int = 0):
-        """Generate tokens based on default amino acid residues
-            and also includes "X" as arbitrary residues.
-            Length of AAs in each token should be provided by "tok_AA_len"
-
-        Args:
-            tok_AA_len (int): Length of token
-            st (str, optional): Defaults to ''.
-            curr_depth (int, optional): Defaults to 0.
-
-        Returns:
-            List: List of tokens
-        """
-        curr_depth += 1
-        if curr_depth <= tok_AA_len:
-            l = [
-                st + t
-                for s in self.default_AA
-                for t in self._token_gen(tok_AA_len, s, curr_depth)
-            ]
-            return l
+    def add_special_token(self, token: str|list|tuple) -> None:
+        if not isinstance(token, (list, tuple)):
+            if token in self.token_to_idx:
+                raise ValueError(f"token {token} already in the vocab")
+            self.idx_to_token[len(self.idx_to_token)] = token
+            self.token_to_idx[token] = len(self.token_to_idx)
         else:
-            return [st]
-
-    def _seq_to_tok(self, seq: str):
-        """Convert each token to index
-
-        Args:
-            seq (str): AA sequence
-
-        Returns:
-            list: A list of indexes
-        """
-
-        seq_idx = []
-        
-        seq_idx += ["[CLS]"]
-
-        for i in range(len(seq) - self.tok_AA_len + 1):
-            curr_token = seq[i : i + self.tok_AA_len]
-            seq_idx.append(curr_token)
-        seq_idx += ['[SEP]']
-        return seq_idx
+            [self.add_special_token(t) for t in token]
+    
+    def vocab_from_txt(self, path):
+        '''
+        note: this function use for constructing vocab mapping
+        but it is only suitable for special txt format
+        it support one column txt file, which column name is 0
+        '''
+        token_to_idx = {}
+        idx_to_token = {}
+        chr_idx = pd.read_csv(path, header=None, sep='\t')
+        if chr_idx.shape[1] == 1:
+            for idx, token in enumerate(chr_idx[0]):
+                token_to_idx[token] = idx
+                idx_to_token[idx] = token
+        self.token_to_idx = token_to_idx
+        self.idx_to_token = idx_to_token
+    
