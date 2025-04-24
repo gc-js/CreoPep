@@ -137,6 +137,11 @@ def CreoPep(X0, X3, X1, X2, τ, g_num, model_name, seed, output):
             if cls_proba>=cls_proba_parent and act_proba>=act_proba_parent and generated_seq.count('C') % 2 == 0 and len("".join(generated_seq)) == gen_len:
                 generated_seqs.append("".join(generated_seq))
                 if "".join(generated_seq) not in train_seq and "".join(generated_seq) not in generated_seqs[0:-1] and all(x not in NON_AA for x in generated_seq):
+                    if count == 0:
+                            generated_seqs_FINAL.append("".join(X0))
+                            cls_probability_all.append(cls_proba_parent)
+                            act_probability_all.append(act_proba_parent)
+                            IDs.append("wild-type")
                     generated_seqs_FINAL.append("".join(generated_seq))
                     cls_probability_all.append(cls_proba)
                     act_probability_all.append(act_proba)
