@@ -34,10 +34,10 @@ if __name__ == "__main__":
 
     cases = os.listdir(args.base_path)
     for case in cases:
-        files = os.listdir(os.path.join(base_path, case))
+        files = os.listdir(os.path.join(args.base_path, case))
         for file in files:
             if file.split(".")[1] == "pdb":
-                pdb_file = os.path.join(base_path, case, file)
-                output_file = os.path.join(base_path, case, file)
+                pdb_file = os.path.join(args.base_path, case, file)
+                output_file = os.path.join(args.base_path, case, file)
                 renumber_chains(pdb_file, output_file)
                 modify_pdb(pdb_file, output_file)
