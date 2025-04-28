@@ -1,18 +1,20 @@
 from Bio.PDB import MMCIFParser, PDBIO
 import os
 
-dir_path = r"./cif"
-files = os.listdir(dir_path)
+base_path = r"./foldx_a9a10"
+cases = os.listdir(base_path)
+for case in cases:
+    files = os.listdir(os.path.join(base_path,case))
+    for file in files:
+        if file.split(".")[1] == "cif":
+            pdb_name = file.split(".")[0]
+            input_cif_filename = os.path.join(base_path, case, file)
+            output_pdb_filename = os.path.join(base_path, case, pdb_name + ".pdb")
+            parser = MMCIFParser()
+            structure = parser.get_structure("Protein", input_cif_filename)
 
-for file in files:
-    if file.split(".")[1] == "cif":
-        pdb_name = file.split(".")[0]
-        input_cif_filename = os.path.join(dir_path, file)
-        output_pdb_filename = os.path.join(dir_path, pdb_name + ".pdb")
+            io = PDBIO()
+            io.set_structure(structure)
+            io.save(output_pdb_filename)
 
-        parser = MMCIFParser()
-        structure = parser.get_structure("Protein", input_cif_filename)
-
-        io = PDBIO()
-        io.set_structure(structure)
-        io.save(output_pdb_filename)
+            print(f"CIF file '{input_cif_filename}' has been converted to PDB file '{output_pdb_filename}'.")
