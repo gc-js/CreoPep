@@ -16,5 +16,3 @@ for case in cases:
             io = PDBIO()
             io.set_structure(structure)
             io.save(output_pdb_filename)
-
-            print(f"CIF file '{input_cif_filename}' has been converted to PDB file '{output_pdb_filename}'.")
