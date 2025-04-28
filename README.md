@@ -148,6 +148,27 @@ python ./data_augmentation/foldx.py --pdb_path ./data_augmentation/pdb/a7/a7.pdb
 - `--task`: Name of task.
 - `--output`: Path of output file.
 
+#### :four: Calculate ΔG
+
+- Place the AlphaFold3-predicted complex structures in the base folder, e.g., [foldx_a9a10](https://github.com/gc-js/CreoPep/tree/main/analysis/foldx_a9a10).
+- Convert the cif to pdb.
+
+```bash
+python ./analysis/cif2pdb.py -base_path ./analysis/foldx_a9a10
+```
+
+- Renumber the pdb to match the FoldX input format.
+
+```bash
+python ./analysis/pdb4foldx.py -base_path ./analysis/foldx_a9a10
+```
+  
+- Run FoldX to calculate the ΔG of all complexes.
+
+```bash
+bash ./analysis/run.sh -d foldx_a9a10 -s Interaction_Energy.py -t ./analysis/foldx_a9a10
+```
+
 #### 💥 *Note*:
 
 - Put FoldX executable into /usr/bin/
