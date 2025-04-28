@@ -1,12 +1,18 @@
 #!/bin/bash
 
-BASE_DIR="foldx_a9a10"
-PYTHON_SCRIPT="Interaction_Energy.py"
-TASK_NAME="a9a10"
+while getopts "d:s:t:" opt; do
+  case $opt in
+    d) BASE_DIR="$OPTARG" ;;
+    s) PYTHON_SCRIPT="$OPTARG" ;;
+    t) TASK_NAME="$OPTARG" ;;
+  esac
+done
 
+echo "BASE_DIR: $BASE_DIR"
+echo "PYTHON_SCRIPT: $PYTHON_SCRIPT"
+echo "TASK_NAME: $TASK_NAME"
 
-CASES=($(ls -d $BASE_DIR/*/))
-
+CASES=($(ls -d "$BASE_DIR"/*/))
 for case_path in "${CASES[@]}"; do
     case_name=$(basename "$case_path")
     echo "Processing case: $case_name" 
