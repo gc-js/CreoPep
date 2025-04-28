@@ -1,5 +1,6 @@
 from Bio.PDB import PDBParser, PDBIO
 import os
+
 def modify_pdb(input_file, output_file):
     with open(input_file, 'r') as f:
         lines = f.readlines()
@@ -26,11 +27,13 @@ def renumber_chains(pdb_file, output_file):
     io.save(output_file)
 
 if __name__ == "__main__":
-    dir_path = "./cif"
-    files = os.listdir(dir_path)
-    for file in files:
-        if file.split(".")[1] == "pdb":
-            pdb_file = os.path.join(dir_path, file)
-            output_file = os.path.join(dir_path, file)
-            renumber_chains(pdb_file, output_file)
-            modify_pdb(pdb_file, output_file)
+    base_path = "./foldx_a9a10"
+    cases = os.listdir(base_path)
+    for case in cases:
+        files = os.listdir(os.path.join(base_path, case))
+        for file in files:
+            if file.split(".")[1] == "pdb":
+                pdb_file = os.path.join(base_path, case, file)
+                output_file = os.path.join(base_path, case, file)
+                renumber_chains(pdb_file, output_file)
+                modify_pdb(pdb_file, output_file)
