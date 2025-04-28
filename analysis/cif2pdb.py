@@ -1,7 +1,7 @@
 from Bio.PDB import MMCIFParser, PDBIO
 import os
 
-dir_path = r"./cif/"
+dir_path = r"./cif"
 files = os.listdir(dir_path)
 
 for file in files:
