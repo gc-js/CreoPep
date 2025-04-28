@@ -1,8 +1,12 @@
 from Bio.PDB import MMCIFParser, PDBIO
 import os
+import argparse
 
-base_path = r"./foldx_a9a10"
-cases = os.listdir(base_path)
+parser = argparse.ArgumentParser('foldx', add_help=False)
+parser.add_argument('-base_path', default='./foldx_a9a10', required=True, type=str, help='base_path')
+args = parser.parse_args()
+
+cases = os.listdir(args.base_path)
 for case in cases:
     files = os.listdir(os.path.join(base_path,case))
     for file in files:
