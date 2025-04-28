@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASE_DIR="foldx"
+BASE_DIR="foldx_a9a10"
 PYTHON_SCRIPT="Interaction_Energy.py"
 TASK_NAME="a9a10"
 
