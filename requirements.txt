@@ -4,3 +4,4 @@ numpy
 transformers
 torch
 matplotlib
+biopython
