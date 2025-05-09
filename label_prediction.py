@@ -46,11 +46,13 @@ def CreoPep(ctxs, X1, X2, output):
             Subtype = X1
             Potency = padded_seq[2]
             Potency_probability = predicted_token_probability_all[0]
+            Subtype_probability = 1
         elif X2 != "X":
             Topk = cls_pos
             Subtype = padded_seq[1]
             Subtype_probability = predicted_token_probability_all[0]
             Potency = X2
+            Potency_probability = 1
         else:
             Topk = cls_pos
             Subtype = padded_seq[1]
