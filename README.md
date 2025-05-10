@@ -183,3 +183,14 @@ export PATH=$PATH:/usr/bin/foldx
 ```bash
 sudo chmod 777 /usr/bin/foldx
 ```
+
+## Reference
+
+```bash
+@article{ge2025creopep,
+  title={CreoPep: A Universal Deep Learning Framework for Target-Specific Peptide Design and Optimization},
+  author={Ge, Cheng and Tae, Han-Shen and Zhang, Zhenqiang and Lu, Lu and Huang, Zhijie and Wang, Yilin and Jiang, Tao and Cai, Wenqing and Chang, Shan and Adams, David J and others},
+  journal={arXiv preprint arXiv:2505.02887},
+  year={2025}
+}
+```
