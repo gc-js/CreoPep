@@ -1,4 +1,4 @@
- [![arXiv](https://img.shields.io/badge/arXiv-2505.02887-orange.svg)](https://arxiv.org/abs/2505.02887)  [![Huggingface](https://img.shields.io/badge/Hugging%20Face-Spaces-brightgreen)](https://arxiv.org/abs/2505.02887)
+ [![arXiv](https://img.shields.io/badge/arXiv-2505.02887-orange.svg)](https://arxiv.org/abs/2505.02887)  [![Huggingface](https://img.shields.io/badge/Hugging%20Face-Spaces-brightgreen)](https://huggingface.co/spaces/oucgc1996/CreoPep)
 # CreoPep
 This is the official repository for "CreoPep: A Universal Deep Learning Framework for Target-Specific Peptide Design and Optimization."
 
