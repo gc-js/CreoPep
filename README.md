@@ -5,7 +5,7 @@ This is the official repository for "CreoPep: A Universal Deep Learning Framewor
 <img src="https://github.com/gc-js/CreoPep/blob/main/imgs/Fig2.png" alt="workflow" width="400"/>
 
 ## [![Huggingface](https://img.shields.io/badge/Hugging%20Face-Spaces-brightgreen)](https://huggingface.co/spaces/oucgc1996/CreoPep)
-We also host a trained version of the model on the HuggingFace Spaces, so you can **start your inference using just your browser**.
+💥We also host a trained version of the model on the HuggingFace Spaces, so you can **start your inference using just your browser**.
 
 🤗[Label prediction](https://huggingface.co/spaces/oucgc1996/CTXGen_Label_Prediction)
 
