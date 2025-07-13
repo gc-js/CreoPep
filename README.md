@@ -1,11 +1,11 @@
- [![arXiv](https://img.shields.io/badge/arXiv-2505.02887-orange.svg)](https://arxiv.org/abs/2505.02887)  [![Huggingface](https://img.shields.io/badge/Hugging%20Face-Spaces-brightgreen)](https://huggingface.co/spaces/oucgc1996/CreoPep)
+ [![arXiv](https://img.shields.io/badge/arXiv-2505.02887-orange.svg)](https://arxiv.org/abs/2505.02887)  
 # CreoPep
 This is the official repository for "CreoPep: A Universal Deep Learning Framework for Target-Specific Peptide Design and Optimization."
 
 <img src="https://github.com/gc-js/CreoPep/blob/main/imgs/Fig2.png" alt="workflow" width="400"/>
 
-## ![Huggingface](https://img.shields.io/badge/Hugging%20Face-Spaces-brightgreen)
-We also host a trained version of the model on the HuggingFace Spaces, so you can start your inference using just your browser.
+## [![Huggingface](https://img.shields.io/badge/Hugging%20Face-Spaces-brightgreen)](https://huggingface.co/spaces/oucgc1996/CreoPep)
+We also host a trained version of the model on the HuggingFace Spaces, so you can **start your inference using just your browser**.
 
 🤗[Label prediction](https://huggingface.co/spaces/oucgc1996/CTXGen_Label_Prediction)
 
