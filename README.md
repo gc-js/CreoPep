@@ -1,7 +1,7 @@
 # CreoPep
 This is the official repository for "CreoPep: A Universal Deep Learning Framework for Target-Specific Peptide Design and Optimization."
 
-<img src="https://github.com/gc-js/CreoPep/blob/main/imgs/Fig2.png" alt="workflow" width="800"/>
+<img src="https://github.com/gc-js/CreoPep/blob/main/imgs/Fig2.png" alt="workflow" width="600"/>
 
 ## ![Huggingface](https://img.shields.io/badge/Hugging%20Face-Spaces-brightgreen)
 We also host a trained version of the model on the HuggingFace Spaces, so you can start your inference using just your browser.
