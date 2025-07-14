@@ -1,12 +1,12 @@
+# CreoPep: A Universal Deep Learning Framework for Target-Specific Peptide Design and Optimization
 <a href="https://arxiv.org/abs/2505.02887"><img src="https://img.shields.io/badge/Paper-ArXiv-orange" style="max-width: 100%;"></a>
-<a href="https://huggingface.co/spaces/oucgc1996/CreoPep"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-red?label=Spaces" style="max-width: 100%;"></a>
-# CreoPep
-This is the official repository for "CreoPep: A Universal Deep Learning Framework for Target-Specific Peptide Design and Optimization."
+<a href="https://huggingface.co/spaces/oucgc1996/CreoPep"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-red?label=Web" style="max-width: 100%;"></a>
+
+## Overview
 
 <img src="https://github.com/gc-js/CreoPep/blob/main/imgs/Fig2.png" alt="workflow" width="400"/>
 
-## <a href="https://huggingface.co/spaces/oucgc1996/CreoPep"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-red?label=Web" style="max-width: 100%;"></a>
-💥We also host a trained version of the model on the HuggingFace Spaces, so you can **start your inference using just your browser**.
+💥**Web**. We also host a trained version of the model on the HuggingFace Spaces, so you can **start your inference using just your browser**.
 
 🤗[Label prediction](https://huggingface.co/spaces/oucgc1996/CTXGen_Label_Prediction)
 
