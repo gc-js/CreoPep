@@ -1,4 +1,4 @@
- [![arXiv](https://img.shields.io/badge/arXiv-2505.02887-orange.svg)](https://arxiv.org/abs/2505.02887)  
+ [![Paper](https://img.shields.io/badge/arXiv-ArXiv-orange.svg)](https://arxiv.org/abs/2505.02887)  
 # CreoPep
 This is the official repository for "CreoPep: A Universal Deep Learning Framework for Target-Specific Peptide Design and Optimization."
 
