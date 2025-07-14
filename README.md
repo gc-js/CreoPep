@@ -6,7 +6,8 @@
 
 <img src="https://github.com/gc-js/CreoPep/blob/main/imgs/Fig2.png" alt="workflow" width="400"/>
 
-💥**Web**. We also host a trained version of the model on the HuggingFace Spaces, so you can **start your inference using just your browser**.
+## :desktop_computer: Web
+We also host a trained version of the model on the HuggingFace Spaces, so you can **start your inference using just your browser**.
 
 🤗[Label prediction](https://huggingface.co/spaces/oucgc1996/CTXGen_Label_Prediction)
 
