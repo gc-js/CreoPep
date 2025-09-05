@@ -131,7 +131,7 @@ def CreoPep(τ, g_num, start, end, model_name, seed, output):
     pbar.close()
 
 if __name__ == '__main__':
-    parser.add_argument('-t', '--temperature', default='1', type=int, help='τ: temperature factor controls the diversity of conotoxins generated. The higher the value, the higher the diversity.')
+    parser.add_argument('-t', '--temperature', default='1', type=float, help='τ: temperature factor controls the diversity of conotoxins generated. The higher the value, the higher the diversity.')
     parser.add_argument('-n', '--num', default='10', type=int, help='Number of generations')
     parser.add_argument('-b', '--begin', default='12', type=int, help='Min length for generating peptides')
     parser.add_argument('-e', '--end', default='16', type=int, help='Max length for generating peptides')
@@ -142,3 +142,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     CreoPep(args.temperature, args.num, args.begin, args.end, args.model, args.seed, args.output)
+
