@@ -165,7 +165,7 @@ if __name__ == '__main__':
     parser.add_argument('-x', '--positions', default='GCCXXXXCAWRC', type=str, help='Positions: the positions that need to be optimized, replaced by X. For example, GCCXXXXCAWRC.')
     parser.add_argument('-is', '--subtype', default='<α7>', type=str, help='subtype of action. For example, α7.')
     parser.add_argument('-ip', '--potency', default='<high>', type=str, help='required potency. For example, High.')
-    parser.add_argument('-t', '--temperature', default='1', type=int, help='τ: temperature factor controls the diversity of conotoxins generated. The higher the value, the higher the diversity.')
+    parser.add_argument('-t', '--temperature', default='1', type=float, help='τ: temperature factor controls the diversity of conotoxins generated. The higher the value, the higher the diversity.')
     parser.add_argument('-n', '--num', default='10', type=int, help='Number of generations')
     parser.add_argument('-m', '--model', default='./models/model_final.pt', type=str, help='Model: model parameters trained at different stages of data augmentation.')
     parser.add_argument('-s', '--seed', default='random', help='Seed: enter an integer as the random seed to ensure reproducible results. The default is random.')
@@ -173,3 +173,4 @@ if __name__ == '__main__':
     parser.add_argument('--vocab', default='./data/vocab.txt', help='Vocab path')
     args = parser.parse_args()
     CreoPep(args.ctx, args.positions, args.subtype, args.potency, args.temperature, args.num, args.model, args.seed, args.output)
+
