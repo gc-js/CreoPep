@@ -1,5 +1,5 @@
 # A deep learning framework (CreoPep) for target-specific design and optimization of conotoxin peptides
-<a href="https://arxiv.org/abs/2505.02887"><img src="https://img.shields.io/badge/Paper-ArXiv-orange" style="max-width: 100%;"></a>
+<a href="https://www.nature.com/articles/s42004-025-01885-5"><img src="https://img.shields.io/badge/Paper-ArXiv-orange" style="max-width: 100%;"></a>
 <a href="https://huggingface.co/spaces/oucgc1996/CreoPep"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-red?label=Web" style="max-width: 100%;"></a>
 
 ## Overview
